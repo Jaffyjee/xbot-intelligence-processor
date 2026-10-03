@@ -61,6 +61,24 @@ a{text-decoration:none;color:inherit}button{font:inherit}.skip{position:absolute
 .socialArrow{color:#617487;font-size:12px}
 @media(max-width:900px){.socialCard{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:650px){.socialCard{padding:12px}.socialCard small{font-size:7px}}
+
+.mintSection{position:relative;overflow:hidden}
+.mintSection:before{content:"";position:absolute;inset:0;background:radial-gradient(500px 240px at 90% 0%,rgba(82,242,163,.08),transparent 70%);pointer-events:none}
+.mintGrid{display:grid;grid-template-columns:1.15fr .85fr;gap:13px;padding:18px 19px;position:relative}
+.mintCard{border:1px solid #1d2b38;border-radius:15px;background:linear-gradient(145deg,#0d151d,#080d12);padding:19px}
+.mintKicker{font-size:9px;letter-spacing:.15em;color:var(--cyan);font-weight:950}
+.mintTitle{margin-top:8px;font-size:25px;font-weight:950;letter-spacing:-.04em}
+.mintDesc{margin-top:7px;color:#708092;font-size:10px;line-height:1.65}
+.walletRow{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:17px;padding:11px;border:1px solid #1b2935;border-radius:10px;background:#080d13}
+.walletState{min-width:0}.walletLabel{font-size:8px;color:#5f7183;font-weight:900;letter-spacing:.1em}.walletValue{margin-top:4px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:#c8d5df;font-size:9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mintForm{margin-top:14px}.quantityLabel{display:flex;justify-content:space-between;color:#718193;font-size:9px;font-weight:900}.quantityInput{width:100%;margin-top:7px;border:1px solid #2a3a49;background:#070c11;color:#f2f7fa;border-radius:10px;padding:14px;font-size:23px;font-weight:950;outline:none}.quantityInput:focus{border-color:#63d8ff;box-shadow:0 0 0 3px rgba(99,216,255,.08)}
+.costBox{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px}.costLine{padding:10px;border:1px solid #1b2935;border-radius:9px;background:#090f15}.costLine span{display:block;color:#5e7183;font-size:8px;font-weight:900}.costLine strong{display:block;margin-top:5px;color:#dce7ed;font-size:12px}
+.mintButton{width:100%;margin-top:11px;border:1px solid #eafff5;background:#eafff5;color:#06110b;border-radius:10px;padding:13px;cursor:pointer;font-size:10px;font-weight:950;letter-spacing:.08em}.mintButton:hover{box-shadow:0 10px 30px rgba(82,242,163,.12)}.mintButton:disabled{opacity:.45;cursor:not-allowed}
+.mintStatus{min-height:16px;margin-top:9px;color:#718294;font-size:9px;line-height:1.5}.mintStatus.success{color:var(--green)}.mintStatus.error{color:var(--red)}
+.mintProof{display:flex;flex-direction:column;justify-content:space-between}.mintProofTop{display:grid;gap:9px}.mintStat{padding:12px;border:1px solid #1b2935;border-radius:10px;background:#090f15}.mintStat span{display:block;color:#5f7183;font-size:8px;font-weight:900;letter-spacing:.08em}.mintStat strong{display:block;margin-top:5px;color:#e4edf2;font-size:14px}.mintStat small{display:block;margin-top:3px;color:#586a7b;font-size:8px}.mintContract{margin-top:10px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:8px;color:#8999a8;word-break:break-all}
+.modal{position:fixed;inset:0;z-index:2000;display:none;place-items:center;padding:20px;background:rgba(2,5,8,.78);backdrop-filter:blur(12px)}.modal.open{display:grid}.modalCard{width:min(440px,100%);border:1px solid #294238;border-radius:20px;background:linear-gradient(145deg,#0e1715,#080d11);box-shadow:0 40px 120px rgba(0,0,0,.6);padding:28px;text-align:center}.modalIcon{width:62px;height:62px;margin:0 auto;border-radius:18px;display:grid;place-items:center;background:#0b2519;border:1px solid #31664c;color:var(--green);font-size:27px;box-shadow:0 0 45px rgba(82,242,163,.14)}.modalEyebrow{margin-top:17px;color:var(--green);font-size:9px;letter-spacing:.16em;font-weight:950}.modalTitle{margin-top:8px;font-size:29px;font-weight:950;letter-spacing:-.04em}.modalText{margin-top:8px;color:#81909f;font-size:10px;line-height:1.7}.modalAmount{margin:17px 0;padding:13px;border:1px solid #20342b;border-radius:10px;background:#09130f;color:#dfffee;font-size:12px;font-weight:900}.modalTx{display:block;margin-top:12px;color:#63d8ff;font-size:9px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;word-break:break-all}.modalClose{width:100%;margin-top:18px;border:1px solid #2a3a49;background:#111a23;color:#dbe6ed;border-radius:10px;padding:11px;cursor:pointer;font-size:9px;font-weight:950}
+@media(max-width:900px){.mintGrid{grid-template-columns:1fr}}
+@media(max-width:650px){.mintGrid{padding:12px}.costBox{grid-template-columns:1fr}.mintTitle{font-size:22px}}
 </style>
 </head>
 <body>
@@ -150,8 +168,46 @@ a{text-decoration:none;color:inherit}button{font:inherit}.skip{position:absolute
 </section>
 
 
+
+<section class="section mintSection" id="mint">
+ <div class="sectionHead"><div class="sectionTitle"><span class="num">04</span> Mint XBOT Transistors</div><div class="hint">Direct X Layer mint · wallet controlled</div></div>
+ <div class="mintGrid">
+  <div class="mintCard">
+   <div class="mintKicker">XBOT / TRANSISTOR FOUNDRY</div>
+   <div class="mintTitle">Acquire the raw logic.</div>
+   <div class="mintDesc">Connect a wallet, choose how many XBOT transistors you want, and mint directly from the deployed ERC-1155 transistor contract on X Layer.</div>
+   <div class="walletRow">
+    <div class="walletState"><div class="walletLabel">WALLET</div><div id="walletAddress" class="walletValue">Not connected</div></div>
+    <button id="connectWallet" class="control primary" type="button">CONNECT WALLET</button>
+   </div>
+   <div class="mintForm">
+    <label class="quantityLabel" for="mintQuantity"><span>QUANTITY</span><span>1 → 1,000,000,000</span></label>
+    <input id="mintQuantity" class="quantityInput" type="number" min="1" max="1000000000" step="1" value="1" inputmode="numeric" aria-label="Number of XBOT transistors to mint">
+    <div class="costBox">
+     <div class="costLine"><span>TRANSISTOR PRICE</span><strong id="mintUnitPrice">0.009 OKB</strong></div>
+     <div class="costLine"><span>ESTIMATED TOTAL</span><strong id="mintTotalPrice">0.00966 OKB</strong></div>
+    </div>
+    <button id="mintButton" class="mintButton" type="button">CONNECT WALLET TO MINT</button>
+    <div id="mintStatus" class="mintStatus" role="status" aria-live="polite">Your wallet signs the transaction. XBOT never receives or stores private keys.</div>
+   </div>
+  </div>
+  <aside class="mintCard mintProof">
+   <div class="mintProofTop">
+    <div class="mintStat"><span>NETWORK</span><strong>X Layer · Chain 196</strong><small>Test phase</small></div>
+    <div class="mintStat"><span>SUPPLY CAP</span><strong>1,000,000,000</strong><small>Fixed at deployment</small></div>
+    <div class="mintStat"><span>PAYMENT</span><strong>OKB</strong><small>Mint price + protocol fee + gas</small></div>
+    <div class="mintStat"><span>ASSET</span><strong>ERC-1155</strong><small>NAND / LATCH transistor primitives</small></div>
+   </div>
+   <div>
+    <div class="mintContract">0x7bE7280e31984d18f62218519985EC5DcCa751De</div>
+    <div class="liveActions" style="margin-top:10px"><a class="link" href="https://www.oklink.com/x-layer/evm/address/0x7bE7280e31984d18f62218519985EC5DcCa751De" target="_blank" rel="noopener">VERIFY CONTRACT ↗</a><a class="link" href="https://www.tapeout.net/" target="_blank" rel="noopener">TAPEOUT ↗</a></div>
+   </div>
+  </aside>
+ </div>
+</section>
+
 <section class="section" id="live-flow" aria-labelledby="live-flow-title">
- <div class="sectionHead"><div class="sectionTitle" id="live-flow-title"><span class="num">03</span> Live X Layer flow</div><div class="hint">ERC-1155 mint activity · no API key</div></div>
+ <div class="sectionHead"><div class="sectionTitle" id="live-flow-title"><span class="num">05</span> Live X Layer flow</div><div class="hint">ERC-1155 mint activity · no API key</div></div>
  <div class="liveGrid">
   <div class="liveFeed">
    <div class="liveToolbar">
@@ -180,7 +236,7 @@ a{text-decoration:none;color:inherit}button{font:inherit}.skip{position:absolute
 </section>
 
 <section class="section">
- <div class="sectionHead"><div class="sectionTitle"><span class="num">05</span> On-chain proof</div><div class="hint">Public deployment references</div></div>
+ <div class="sectionHead"><div class="sectionTitle"><span class="num">06</span> On-chain proof</div><div class="hint">Public deployment references</div></div>
  <div class="proof">
   <div class="proofText"><div class="proofTitle">Verify the deployment.</div><p>Every critical project reference is exposed for independent inspection. No wallet signing or private credentials are required by this demo.</p><div class="links"><a class="link" href="https://www.oklink.com/x-layer/evm/address/0xa5fc69Ca2D3d462CCa204D894D85ac8071c4F0f0" target="_blank" rel="noopener">PROCESSOR ↗</a><a class="link" href="https://www.oklink.com/x-layer/evm/address/0x7bE7280e31984d18f62218519985EC5DcCa751De" target="_blank" rel="noopener">TRANSISTORS ↗</a><a class="link" href="https://www.tapeout.net/" target="_blank" rel="noopener">TAPEOUT ↗</a><a class="link" href="https://www.okx.com/xlayer" target="_blank" rel="noopener">X LAYER ↗</a></div></div>
   <div class="addresses"><div class="addrLabel">PROCESSOR CONTRACT</div><div class="addr">0xa5fc69Ca2D3d462CCa204D894D85ac8071c4F0f0</div><div class="addrLabel" style="margin-top:13px">TRANSISTOR CONTRACT</div><div class="addr">0x7bE7280e31984d18f62218519985EC5DcCa751De</div></div>
@@ -189,7 +245,7 @@ a{text-decoration:none;color:inherit}button{font:inherit}.skip{position:absolute
 
 
 <section class="section" id="connect">
- <div class="sectionHead"><div class="sectionTitle"><span class="num">06</span> Connect with XBOT</div><div class="hint">Official channels</div></div>
+ <div class="sectionHead"><div class="sectionTitle"><span class="num">07</span> Connect with XBOT</div><div class="hint">Official channels</div></div>
  <div style="padding:16px 19px">
   <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:9px">
    <a class="socialCard" href="https://x.com/xbotlabs" target="_blank" rel="noopener" aria-label="XBOT on X / Twitter">
@@ -209,7 +265,7 @@ a{text-decoration:none;color:inherit}button{font:inherit}.skip{position:absolute
 </section>
 
 <section class="section">
- <div class="sectionHead"><div class="sectionTitle"><span class="num">07</span> Verification matrix</div><div class="hint">Complete 2-of-3 state space</div></div>
+ <div class="sectionHead"><div class="sectionTitle"><span class="num">08</span> Verification matrix</div><div class="hint">Complete 2-of-3 state space</div></div>
  <div class="tableWrap"><table class="truth"><thead><tr><th>Risk</th><th>Liquidity</th><th>Market</th><th>Expected OUT</th><th>State</th></tr></thead><tbody id="truthTable"></tbody></table></div>
  <div class="footer"><span>Deterministic client-side verification · no API keys required</span><span>TAPEOUT CIRCUIT <code>3.2.268</code></span></div>
 </section>
@@ -219,5 +275,17 @@ a{text-decoration:none;color:inherit}button{font:inherit}.skip{position:absolute
 </main>
 </div>
 <script src="./app.js"></script>
+
+<div id="mintSuccessModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="mintSuccessTitle">
+ <div class="modalCard">
+  <div class="modalIcon">✓</div>
+  <div class="modalEyebrow">ON-CHAIN MINT CONFIRMED</div>
+  <div id="mintSuccessTitle" class="modalTitle">Congratulations!</div>
+  <div class="modalText">Your XBOT transistor purchase was successfully confirmed on X Layer.</div>
+  <div id="mintSuccessAmount" class="modalAmount">+1 XBOT Transistor</div>
+  <a id="mintSuccessTx" class="modalTx" href="#" target="_blank" rel="noopener">View transaction ↗</a>
+  <button id="closeMintSuccess" class="modalClose" type="button">CONTINUE BUILDING</button>
+ </div>
+</div>
 </body>
 </html>
