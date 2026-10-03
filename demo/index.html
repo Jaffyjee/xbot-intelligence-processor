@@ -116,13 +116,116 @@ body:after{content:"";position:fixed;inset:0;z-index:9999;pointer-events:none;ba
 @keyframes orbitPulse{0%,100%{transform:scale(.96);opacity:.55}50%{transform:scale(1.04);opacity:1}}
 @media(max-width:650px){.nav:after{display:none}.herohead:before,.herohead:after{opacity:.35;right:-50px}.herohead{min-height:360px}}
 @media(prefers-reduced-motion:reduce){.herohead:before,.canvas:after{animation:none}}
+
+/* XBOT // daylight-readable adaptive theme */
+:root{
+  color-scheme: dark light;
+  --focus:#087ea4;
+}
+.themeToggle{
+  display:inline-flex;align-items:center;gap:7px;border:1px solid #334454;
+  background:#0d151d;color:#dbe8ef;border-radius:999px;padding:8px 11px;
+  cursor:pointer;font-size:9px;font-weight:950;letter-spacing:.06em;
+}
+.themeToggle:hover{border-color:#63d8ff;box-shadow:0 0 18px rgba(99,216,255,.10)}
+.themeIcon{font-size:12px}
+@media (prefers-color-scheme:light){
+  :root:not([data-theme="dark"]){
+    --bg:#f4f7f9;--panel:#ffffff;--panel2:#f8fafc;--line:#d9e1e7;--line2:#c7d2da;
+    --text:#101820;--muted:#566575;--green:#087a4b;--cyan:#087ea4;--red:#c9364d;
+    --shadow:0 24px 70px rgba(24,45,60,.13);
+  }
+  :root:not([data-theme="dark"]) body{
+    background:radial-gradient(900px 520px at 50% -12%,rgba(8,126,164,.10),transparent 62%),
+      radial-gradient(700px 500px at 100% 30%,rgba(8,122,75,.07),transparent 65%),#f4f7f9;
+    color:#101820;
+  }
+  :root:not([data-theme="dark"]) body:before{
+    opacity:.55;background-image:linear-gradient(rgba(8,126,164,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(8,126,164,.045) 1px,transparent 1px);
+  }
+  :root:not([data-theme="dark"]) .hero{background:linear-gradient(145deg,#fff,#f5f8fa);border-color:#d5dfe6}
+  :root:not([data-theme="dark"]) .hero h1 span{color:#617181}
+  :root:not([data-theme="dark"]) .hero .lead{color:#526271}
+  :root:not([data-theme="dark"]) .heroMeta .tag,
+  :root:not([data-theme="dark"]) .section,
+  :root:not([data-theme="dark"]) .stat,
+  :root:not([data-theme="dark"]) .signal,
+  :root:not([data-theme="dark"]) .canvas,
+  :root:not([data-theme="dark"]) .outputPanel,
+  :root:not([data-theme="dark"]) .life,
+  :root:not([data-theme="dark"]) .chainMetric,
+  :root:not([data-theme="dark"]) .mintCard,
+  :root:not([data-theme="dark"]) .liveFeed,
+  :root:not([data-theme="dark"]) .socialCard{
+    background:linear-gradient(145deg,#fff,#f7fafc);border-color:#d5dfe6;
+  }
+  :root:not([data-theme="dark"]) .stats{background:#edf2f5;border-color:#d5dfe6}
+  :root:not([data-theme="dark"]) .statLabel,
+  :root:not([data-theme="dark"]) .hint,
+  :root:not([data-theme="dark"]) .sigCode,
+  :root:not([data-theme="dark"]) .lifeNo,
+  :root:not([data-theme="dark"]) .chainMetricLabel,
+  :root:not([data-theme="dark"]) .addrLabel{color:#637383}
+  :root:not([data-theme="dark"]) .statSub,
+  :root:not([data-theme="dark"]) .lifeText,
+  :root:not([data-theme="dark"]) .mintDesc,
+  :root:not([data-theme="dark"]) .decision,
+  :root:not([data-theme="dark"]) .flowMeta,
+  :root:not([data-theme="dark"]) .chainMetricSub{color:#607080}
+  :root:not([data-theme="dark"]) .node{background:#f8fbfc;border-color:#b9c9d3;color:#16232d}
+  :root:not([data-theme="dark"]) .node small{color:#637586}
+  :root:not([data-theme="dark"]) .grid{background-image:linear-gradient(rgba(8,126,164,.065) 1px,transparent 1px),linear-gradient(90deg,rgba(8,126,164,.065) 1px,transparent 1px)}
+  :root:not([data-theme="dark"]) .canvas{background:#f1f5f7}
+  :root:not([data-theme="dark"]) .wire{background:#91a2ae}
+  :root:not([data-theme="dark"]) .link,
+  :root:not([data-theme="dark"]) .control,
+  :root:not([data-theme="dark"]) .themeToggle{background:#eef3f6;color:#18303d;border-color:#c8d5dd}
+  :root:not([data-theme="dark"]) .switch button{background:#edf2f5;color:#536575;border-color:#c7d3dc}
+  :root:not([data-theme="dark"]) .switch button.active,
+  :root:not([data-theme="dark"]) .control.primary,
+  :root:not([data-theme="dark"]) .mintButton{background:#102c22;color:#fff;border-color:#102c22}
+  :root:not([data-theme="dark"]) .out.off{color:#758693}
+  :root:not([data-theme="dark"]) .addr,
+  :root:not([data-theme="dark"]) .walletRow,
+  :root:not([data-theme="dark"]) .costLine,
+  :root:not([data-theme="dark"]) .mintStat,
+  :root:not([data-theme="dark"]) .liveNote{background:#eef3f6;border-color:#d0dbe2}
+  :root:not([data-theme="dark"]) .addr,
+  :root:not([data-theme="dark"]) .mintContract{color:#405463}
+  :root:not([data-theme="dark"]) .modal{background:rgba(232,238,242,.76)}
+  :root:not([data-theme="dark"]) .modalCard{background:#fff;border-color:#c8d8d1;color:#101820}
+}
+:root[data-theme="light"]{
+  --bg:#f4f7f9;--panel:#fff;--panel2:#f8fafc;--line:#d9e1e7;--line2:#c7d2da;
+  --text:#101820;--muted:#566575;--green:#087a4b;--cyan:#087ea4;--red:#c9364d;
+  --shadow:0 24px 70px rgba(24,45,60,.13);
+}
+:root[data-theme="light"] body{background:radial-gradient(900px 520px at 50% -12%,rgba(8,126,164,.10),transparent 62%),radial-gradient(700px 500px at 100% 30%,rgba(8,122,75,.07),transparent 65%),#f4f7f9;color:#101820}
+:root[data-theme="light"] body:before{opacity:.55;background-image:linear-gradient(rgba(8,126,164,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(8,126,164,.045) 1px,transparent 1px)}
+:root[data-theme="light"] .hero{background:linear-gradient(145deg,#fff,#f5f8fa);border-color:#d5dfe6}
+:root[data-theme="light"] .hero h1 span{color:#617181}.hero .lead{color:#526271}
+:root[data-theme="light"] .heroMeta .tag,:root[data-theme="light"] .section,:root[data-theme="light"] .signal,:root[data-theme="light"] .canvas,:root[data-theme="light"] .outputPanel,:root[data-theme="light"] .life,:root[data-theme="light"] .chainMetric,:root[data-theme="light"] .mintCard,:root[data-theme="light"] .liveFeed,:root[data-theme="light"] .socialCard{background:linear-gradient(145deg,#fff,#f7fafc);border-color:#d5dfe6}
+:root[data-theme="light"] .stats{background:#edf2f5;border-color:#d5dfe6}
+:root[data-theme="light"] .node{background:#f8fbfc;border-color:#b9c9d3;color:#16232d}
+:root[data-theme="light"] .node small{color:#637586}
+:root[data-theme="light"] .grid{background-image:linear-gradient(rgba(8,126,164,.065) 1px,transparent 1px),linear-gradient(90deg,rgba(8,126,164,.065) 1px,transparent 1px)}
+:root[data-theme="light"] .canvas{background:#f1f5f7}
+:root[data-theme="light"] .wire{background:#91a2ae}
+:root[data-theme="light"] .link,:root[data-theme="light"] .control,:root[data-theme="light"] .themeToggle{background:#eef3f6;color:#18303d;border-color:#c8d5dd}
+:root[data-theme="light"] .switch button{background:#edf2f5;color:#536575;border-color:#c7d3dc}
+:root[data-theme="light"] .switch button.active,:root[data-theme="light"] .control.primary,:root[data-theme="light"] .mintButton{background:#102c22;color:#fff;border-color:#102c22}
+:root[data-theme="light"] .addr,:root[data-theme="light"] .walletRow,:root[data-theme="light"] .costLine,:root[data-theme="light"] .mintStat,:root[data-theme="light"] .liveNote{background:#eef3f6;border-color:#d0dbe2}
+:root[data-theme="light"] .addr,:root[data-theme="light"] .mintContract{color:#405463}
+:root[data-theme="light"] .modal{background:rgba(232,238,242,.76)}
+:root[data-theme="light"] .modalCard{background:#fff;border-color:#c8d8d1;color:#101820}
+@media(max-width:650px){.themeToggle{padding:7px 9px}.themeToggle span:last-child{display:none}}
 </style>
 </head>
 <body>
 <div class="shell">
 <header class="nav">
   <div class="brand"><div class="logo"><img src="../assets/xbot-logo.svg" alt="XBOT" width="28" height="28"></div><span>XBOT INTELLIGENCE PROCESSOR</span></div>
-  <div class="status"><span class="led"></span>X LAYER · TEST</div>
+  <div style="display:flex;align-items:center;gap:8px"><button id="themeToggle" class="themeToggle" type="button" aria-label="Switch theme"><span class="themeIcon">◐</span><span>AUTO</span></button><div class="status"><span class="led"></span>X LAYER · TEST</div></div>
 </header>
 
 <main id="main" class="hero" aria-label="XBOT Intelligence Processor product demo">
