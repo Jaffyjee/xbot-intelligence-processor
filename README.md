@@ -1,6 +1,12 @@
+<div align="center">
+
+<img src="assets/xbot-logo.svg" alt="XBOT logo" width="140">
+
 # XBOT Intelligence Processor
 
-> **On-chain digital logic for XBOT intelligence — deployed on X Layer through TapeOut.**
+**On-chain digital logic for XBOT intelligence — deployed on X Layer through TapeOut.**
+
+</div>
 
 XBOT Intelligence Processor is an experimental digital-logic processor inspired by the XBOT AI intelligence stack. It translates multiple intelligence signals into deterministic logic that can be represented as a TapeOut circuit.
 
@@ -113,6 +119,8 @@ The circuit was designed around:
 .
 ├── README.md
 ├── LICENSE
+├── assets/
+│   └── xbot-logo.svg
 ├── docs/
 │   ├── architecture.md
 │   ├── circuit.md
@@ -182,7 +190,6 @@ This is a mathematical cap based on the published supply and unit price, **not a
 
 The browser demo intentionally has no wallet private keys, seed phrases, API secrets, or signing credentials. Its logic is deterministic and can be checked against the eight-state truth table. The repository does not claim a third-party security audit; reviewers should inspect the deployed contracts and TapeOut protocol behavior directly.
 
-
 ## Development roadmap
 
 ### Completed
@@ -192,6 +199,7 @@ The browser demo intentionally has no wallet private keys, seed phrases, API sec
 - [x] XBOT Consensus logic designed
 - [x] TapeOut circuit `3.2.268` documented
 - [x] Browser truth-table demo
+- [x] XBOT brand asset added to the repository
 
 ### Next
 - [ ] Add additional intelligence circuits
