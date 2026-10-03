@@ -4,13 +4,13 @@
 
 ## Overview
 
-**XBOT Intelligence Processor** is a digital logic processor created through the TapeOut Protocol and deployed on **X Layer**.
+**XBOT Intelligence Processor** is a digital logic processor created through the TapeOut Protocol and deployed on X Layer.
 
 The project explores how concepts from XBOT's on-chain intelligence system can be represented through programmable digital logic and hardware-style computation.
 
-The processor is designed around fundamental digital building blocks such as **NAND logic** and **LATCH memory**, which can be combined into increasingly complex computational circuits.
+The processor is designed around fundamental digital building blocks such as NAND logic and LATCH memory, which can be combined into increasingly complex computational circuits.
 
-The long-term goal is to develop an **XBOT Intelligence Circuit** capable of representing deterministic intelligence and decision-making logic at the circuit level.
+The long-term goal is to explore how XBOT intelligence can be represented through programmable digital logic, enabling decentralized signal processing and decision-making at the circuit level.
 
 ---
 
@@ -32,11 +32,13 @@ The long-term goal is to develop an **XBOT Intelligence Circuit** capable of rep
 
 ## Why XBOT + TapeOut?
 
-XBOT is an on-chain intelligence project focused on analyzing and interacting with blockchain data.
+XBOT is an AI-powered intelligence system focused on analyzing and interacting with blockchain data.
 
-TapeOut provides a different way to explore computation: instead of representing intelligence only through software, XBOT can also be represented through **digital logic, memory, arithmetic and deterministic circuit operations**.
+Typical blockchain intelligence systems process information through software, APIs, databases, and off-chain infrastructure. XBOT can also represent decision-making through digital logic and programmable circuits.
 
-The XBOT Intelligence Processor explores this connection between:
+TapeOut provides a different computational layer by allowing digital logic to be constructed directly as circuits.
+
+This creates an interesting connection between:
 
 ```text
 Blockchain Intelligence
