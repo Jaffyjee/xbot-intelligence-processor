@@ -51,6 +51,16 @@ a{text-decoration:none;color:inherit}button{font:inherit}.skip{position:absolute
 @media(prefers-reduced-motion:reduce){.flowNew{animation:none}}
 @media(max-width:650px){.liveGrid{padding:12px}.liveSide{grid-template-columns:1fr 1fr}.flow{grid-template-columns:auto 1fr}.flowAmount{grid-column:2;text-align:left}.liveFeedList{max-height:320px}}
 
+
+.socialCard{display:flex;align-items:center;gap:11px;min-width:0;padding:14px;border:1px solid #1d2936;background:linear-gradient(150deg,#0c1219,#0a0f15);border-radius:12px;color:#aebbc7;transition:.2s}
+.socialCard:hover{border-color:#3b5064;transform:translateY(-1px);box-shadow:0 12px 30px rgba(0,0,0,.2)}
+.socialIcon{flex:0 0 31px;width:31px;height:31px;display:grid;place-items:center;border:1px solid #263746;border-radius:9px;background:#0a1118;color:#cfe8dc;font-size:10px;font-weight:950}
+.socialCard span:nth-child(2){min-width:0;flex:1}
+.socialCard strong{display:block;color:#e8f0f4;font-size:9px;letter-spacing:.08em}
+.socialCard small{display:block;margin-top:4px;color:#607184;font-size:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.socialArrow{color:#617487;font-size:12px}
+@media(max-width:900px){.socialCard{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:650px){.socialCard{padding:12px}.socialCard small{font-size:7px}}
 </style>
 </head>
 <body>
@@ -177,8 +187,29 @@ a{text-decoration:none;color:inherit}button{font:inherit}.skip{position:absolute
  </div>
 </section>
 
+
+<section class="section" id="connect">
+ <div class="sectionHead"><div class="sectionTitle"><span class="num">06</span> Connect with XBOT</div><div class="hint">Official channels</div></div>
+ <div style="padding:16px 19px">
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:9px">
+   <a class="socialCard" href="https://x.com/xbotlabs" target="_blank" rel="noopener" aria-label="XBOT on X / Twitter">
+    <span class="socialIcon">𝕏</span><span><strong>X / TWITTER</strong><small>@xbotlabs</small></span><span class="socialArrow">↗</span>
+   </a>
+   <a class="socialCard" href="https://t.me/XBOTonchain" target="_blank" rel="noopener" aria-label="XBOT on Telegram">
+    <span class="socialIcon">TG</span><span><strong>TELEGRAM</strong><small>@XBOTonchain</small></span><span class="socialArrow">↗</span>
+   </a>
+   <a class="socialCard" href="https://xbotonchain.com" target="_blank" rel="noopener" aria-label="XBOT official website">
+    <span class="socialIcon">↗</span><span><strong>WEBSITE</strong><small>xbotonchain.com</small></span><span class="socialArrow">↗</span>
+   </a>
+   <a class="socialCard" href="mailto:support@xbotonchain.com" aria-label="Email XBOT support">
+    <span class="socialIcon">@</span><span><strong>SUPPORT</strong><small>support@xbotonchain.com</small></span><span class="socialArrow">↗</span>
+   </a>
+  </div>
+ </div>
+</section>
+
 <section class="section">
- <div class="sectionHead"><div class="sectionTitle"><span class="num">06</span> Verification matrix</div><div class="hint">Complete 2-of-3 state space</div></div>
+ <div class="sectionHead"><div class="sectionTitle"><span class="num">07</span> Verification matrix</div><div class="hint">Complete 2-of-3 state space</div></div>
  <div class="tableWrap"><table class="truth"><thead><tr><th>Risk</th><th>Liquidity</th><th>Market</th><th>Expected OUT</th><th>State</th></tr></thead><tbody id="truthTable"></tbody></table></div>
  <div class="footer"><span>Deterministic client-side verification · no API keys required</span><span>TAPEOUT CIRCUIT <code>3.2.268</code></span></div>
 </section>
