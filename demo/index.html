@@ -1,143 +1,114 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#07090d">
-  <title>XBOT · Intelligence Processor</title>
-  <meta name="description" content="Professional interactive demonstration of the XBOT 2-of-3 consensus circuit taped out on X Layer.">
-  <style>
-    :root{
-      --bg:#05070a;--panel:#0a0e14;--panel2:#0d131b;--line:#1b2633;--text:#edf4fb;--muted:#7f8da0;
-      --green:#48f0a0;--cyan:#63d9ff;--red:#ff6678;--amber:#ffc857;--shadow:0 24px 80px rgba(0,0,0,.45);
-      font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-    }
-    *{box-sizing:border-box}html{scroll-behavior:smooth}
-    body{margin:0;min-height:100vh;background:radial-gradient(circle at 80% 0%,rgba(72,240,160,.08),transparent 32%),radial-gradient(circle at 15% 15%,rgba(99,217,255,.07),transparent 30%),var(--bg);color:var(--text)}
-    button{font:inherit}.wrap{width:min(1180px,calc(100% - 32px));margin:auto;padding:28px 0 64px}
-    .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px}
-    .brand{display:flex;align-items:center;gap:12px;font-weight:850;letter-spacing:.04em}.mark{width:34px;height:34px;border:1px solid #294053;border-radius:10px;display:grid;place-items:center;background:#0d151d;color:var(--green);font-size:14px}
-    .badge{display:inline-flex;align-items:center;gap:8px;padding:8px 11px;border:1px solid #1d3038;border-radius:999px;background:#09120f;color:#a8f8cf;font-size:12px;font-weight:750}.dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 14px var(--green)}
-    .hero{border:1px solid var(--line);border-radius:24px;background:linear-gradient(145deg,rgba(13,19,27,.96),rgba(7,10,14,.96));box-shadow:var(--shadow);overflow:hidden}
-    .herohead{padding:34px 34px 26px;border-bottom:1px solid var(--line);position:relative}.eyebrow{font-size:11px;letter-spacing:.16em;color:var(--cyan);font-weight:800}.hero h1{font-size:clamp(34px,6vw,64px);line-height:.98;margin:10px 0 14px;letter-spacing:-.045em}.hero p{max-width:720px;color:var(--muted);font-size:15px;line-height:1.65;margin:0}
-    .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}.chip{border:1px solid #202d3b;background:#0a1017;border-radius:10px;padding:8px 10px;color:#aebccc;font-size:12px}.chip b{color:#eef6fc}
-    .content{padding:24px}.section{border:1px solid var(--line);border-radius:18px;background:rgba(9,13,18,.82);margin-bottom:16px;overflow:hidden}.section:last-child{margin-bottom:0}
-    .sectionhead{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:18px 20px;border-bottom:1px solid var(--line)}.sectiontitle{font-size:14px;font-weight:800}.sectionhint{font-size:12px;color:var(--muted)}
-    .inputs{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:18px 20px}.signal{border:1px solid #1e2b39;border-radius:15px;background:#0b1118;padding:16px;transition:.2s}.signal.live{border-color:#245a47;box-shadow:inset 0 0 0 1px rgba(72,240,160,.06),0 0 30px rgba(72,240,160,.05)}
-    .signaltop{display:flex;align-items:center;justify-content:space-between}.siglabel{font-size:12px;color:#a7b5c5;font-weight:750}.signame{font-size:17px;font-weight:850;margin-top:7px}.statepill{font-size:11px;padding:5px 8px;border-radius:7px;background:#121a23;color:#8291a3}.live .statepill{color:#a9ffd0;background:#0b2118}
-    .switch{display:flex;gap:7px;margin-top:14px}.switch button{flex:1;border:1px solid #253343;background:#101822;color:#a8b5c4;border-radius:9px;padding:9px;cursor:pointer;font-weight:800}.switch button:hover{border-color:#38506a}.switch button.active{background:#eafdf5;color:#07110c;border-color:#eafdf5}
-    .processor{display:grid;grid-template-columns:1fr 280px;gap:16px;padding:18px 20px}.diagram{position:relative;min-height:320px;border:1px solid #172330;border-radius:15px;background:linear-gradient(180deg,#080d13,#070a0e);overflow:hidden}
-    .gridbg{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:28px 28px}
-    .nodes{position:absolute;inset:0}.node{position:absolute;width:92px;padding:10px 8px;text-align:center;border:1px solid #263544;border-radius:10px;background:#0d141c;font-size:11px;font-weight:800;z-index:2;transition:.2s}.node small{display:block;color:#68788a;font-weight:600;margin-top:3px}.node.active{border-color:#3a7d60;box-shadow:0 0 22px rgba(72,240,160,.11);color:#dffff0}.node.output{border-color:#385e6b}.n1{left:6%;top:18%}.n2{left:6%;top:61%}.n3{left:36%;top:40%}.n4{left:57%;top:22%}.n5{left:57%;top:63%}.n6{left:78%;top:40%}.wire{position:absolute;height:1px;background:#273746;transform-origin:left center;z-index:1}.wire.hot{background:linear-gradient(90deg,var(--green),var(--cyan));box-shadow:0 0 9px rgba(72,240,160,.45)}
-    .w1{left:15%;top:31%;width:22%;transform:rotate(20deg)}.w2{left:15%;top:69%;width:22%;transform:rotate(-20deg)}.w3{left:45%;top:48%;width:14%;transform:rotate(-50deg)}.w4{left:45%;top:48%;width:14%;transform:rotate(45deg)}.w5{left:66%;top:31%;width:15%;transform:rotate(28deg)}.w6{left:66%;top:69%;width:15%;transform:rotate(-28deg)}
-    .outpanel{border:1px solid #1e2e39;border-radius:15px;background:#091016;padding:20px;display:flex;flex-direction:column;justify-content:center;text-align:center}.outlabel{font-size:11px;letter-spacing:.12em;color:#7f93a5;font-weight:800}.outvalue{font-size:82px;line-height:1;font-weight:950;margin:10px 0}.outvalue.on{color:var(--green);text-shadow:0 0 35px rgba(72,240,160,.25)}.outvalue.off{color:#647283}.decision{font-size:13px;color:#aab8c7;line-height:1.5}.decision strong{color:#eaf3fa}.metric{display:flex;justify-content:space-between;border-top:1px solid #18232e;padding-top:12px;margin-top:16px;font-size:11px;color:#708092}.metric b{color:#b9c7d5}
-    .toolbar{display:flex;gap:9px;flex-wrap:wrap;padding:0 20px 18px}.btn{border:1px solid #263647;background:#111a24;color:#e8f0f6;border-radius:10px;padding:10px 13px;cursor:pointer;font-weight:800;font-size:12px}.btn:hover{border-color:#3d5369}.btn.primary{background:#eafdf5;color:#07110c;border-color:#eafdf5}.btn:disabled{opacity:.5;cursor:not-allowed}
-    .tablewrap{overflow:auto}.truth{width:100%;border-collapse:collapse;min-width:500px}.truth th,.truth td{padding:12px 16px;text-align:center;border-bottom:1px solid #17212c;font-size:12px}.truth th{color:#718094;font-size:10px;letter-spacing:.08em;text-transform:uppercase}.truth tr.current{background:rgba(72,240,160,.055)}.truth tr.current td{color:#e8fff4}.result1{color:var(--green);font-weight:900}.result0{color:#6d7b8b;font-weight:800}
-    .footerline{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:16px 20px;color:#647386;font-size:11px}.footerline code{color:#9aabbc}.pulse{animation:pulse .65s ease}@keyframes pulse{0%{transform:scale(.92);opacity:.4}60%{transform:scale(1.06);opacity:1}100%{transform:scale(1);opacity:1}}
-    @media(max-width:850px){.processor{grid-template-columns:1fr}.diagram{min-height:290px}.inputs{grid-template-columns:1fr}}
-    @media(max-width:560px){.wrap{width:min(100% - 18px,1180px);padding-top:12px}.herohead{padding:25px 20px 20px}.content{padding:12px}.processor{padding:12px}.inputs{padding:12px}.sectionhead{padding:15px}.hero h1{font-size:42px}.node{width:78px;font-size:10px}.n1{left:4%}.n2{left:4%}.n3{left:31%}.n4{left:55%}.n5{left:55%}.n6{left:77%}}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#06080c">
+<title>XBOT — Intelligence Processor</title>
+<meta name="description" content="XBOT Intelligence Processor — interactive TapeOut circuit demonstration on X Layer.">
+<style>
+:root{--bg:#06080c;--panel:#0b0f15;--panel2:#0e141c;--line:#1b2531;--line2:#263342;--text:#f2f6fa;--muted:#8290a0;--green:#52f2a3;--cyan:#63d8ff;--red:#ff6b7c;--shadow:0 30px 100px rgba(0,0,0,.45);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-height:100vh;background:radial-gradient(900px 500px at 80% -10%,rgba(82,242,163,.09),transparent 65%),radial-gradient(700px 500px at 5% 10%,rgba(99,216,255,.06),transparent 65%),var(--bg);color:var(--text)}
+a{text-decoration:none;color:inherit}button{font:inherit}.shell{width:min(1240px,calc(100% - 36px));margin:auto;padding:22px 0 70px}
+.nav{height:58px;display:flex;align-items:center;justify-content:space-between;gap:16px}.brand{display:flex;align-items:center;gap:11px;font-weight:900;letter-spacing:.06em;font-size:13px}.logo{width:34px;height:34px;border:1px solid #2a3a49;border-radius:10px;display:grid;place-items:center;background:linear-gradient(145deg,#101923,#090d12);color:var(--green);font-size:12px;box-shadow:0 0 25px rgba(82,242,163,.08)}.status{display:flex;align-items:center;gap:8px;padding:7px 10px;border:1px solid #20352e;border-radius:999px;background:#09120f;color:#b8fbd7;font-size:11px;font-weight:800}.led{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 12px var(--green)}
+.hero{position:relative;margin-top:18px;border:1px solid var(--line);border-radius:26px;background:linear-gradient(150deg,rgba(14,20,28,.98),rgba(7,10,14,.98));box-shadow:var(--shadow);overflow:hidden}.hero:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,transparent 20%,rgba(255,255,255,.018) 50%,transparent 80%)}
+.herohead{position:relative;padding:52px 46px 38px;border-bottom:1px solid var(--line);z-index:1}.eyebrow{display:flex;align-items:center;gap:9px;color:var(--cyan);font-size:10px;letter-spacing:.18em;font-weight:900}.eyebrow:before{content:"";width:24px;height:1px;background:var(--cyan);opacity:.7}.hero h1{max-width:850px;margin:14px 0 16px;font-size:clamp(42px,7vw,78px);line-height:.94;letter-spacing:-.06em}.hero h1 span{color:#91a1b2}.hero .lead{max-width:760px;margin:0;color:#8f9baa;font-size:15px;line-height:1.75}.heroMeta{display:flex;flex-wrap:wrap;gap:8px;margin-top:27px}.tag{padding:8px 10px;border:1px solid #222e3b;background:#0a1016;border-radius:9px;color:#9aa9b8;font-size:11px}.tag strong{color:#edf4f9;font-weight:800}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--line);background:#090d12}.stat{padding:19px 22px;border-right:1px solid var(--line)}.stat:last-child{border-right:0}.statLabel{font-size:9px;letter-spacing:.13em;color:#68788a;font-weight:900}.statValue{margin-top:7px;font-size:18px;font-weight:900;letter-spacing:-.02em}.statValue.green{color:var(--green)}.statSub{margin-top:3px;font-size:10px;color:#627181}
+.body{padding:24px}.section{border:1px solid var(--line);border-radius:18px;background:rgba(9,13,18,.86);overflow:hidden;margin-bottom:15px}.section:last-child{margin-bottom:0}.sectionHead{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 19px;border-bottom:1px solid var(--line)}.sectionTitle{display:flex;align-items:center;gap:9px;font-size:12px;font-weight:900;letter-spacing:.02em}.num{color:#617285;font-variant-numeric:tabular-nums}.hint{color:#667588;font-size:10px}
+.inputs{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;padding:16px 19px}.signal{border:1px solid #1d2936;background:linear-gradient(150deg,#0c1219,#0a0f15);border-radius:14px;padding:15px;transition:.2s}.signal.live{border-color:#2d624c;box-shadow:inset 0 0 0 1px rgba(82,242,163,.05),0 12px 35px rgba(82,242,163,.04)}.sigTop{display:flex;justify-content:space-between;align-items:center}.sigCode{font-size:9px;color:#637487;font-weight:900;letter-spacing:.12em}.pill{font-size:9px;padding:5px 7px;border-radius:6px;background:#121a22;color:#718194;font-weight:900}.live .pill{color:#aef8d0;background:#0b2017}.sigName{font-size:17px;font-weight:900;margin-top:12px;letter-spacing:-.02em}.switch{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:13px}.switch button,.control{border:1px solid #253342;background:#111923;color:#92a1b1;border-radius:8px;padding:9px 7px;cursor:pointer;font-size:10px;font-weight:900;transition:.15s}.switch button:hover,.control:hover{border-color:#3b5064;color:#dce7ee}.switch button.active{background:#effff7;color:#06110b;border-color:#effff7}
+.execution{display:grid;grid-template-columns:minmax(0,1fr) 275px;gap:13px;padding:16px 19px}.canvas{position:relative;height:355px;border:1px solid #182532;border-radius:14px;overflow:hidden;background:#070b10}.grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.022) 1px,transparent 1px);background-size:26px 26px}.canvasLabel{position:absolute;left:14px;top:12px;color:#526275;font-size:9px;letter-spacing:.12em;font-weight:900}.node{position:absolute;width:94px;padding:10px 7px;border:1px solid #293846;border-radius:9px;background:#0d141c;text-align:center;font-size:9px;font-weight:900;z-index:2;transition:.25s}.node small{display:block;margin-top:4px;color:#617284;font-size:7px;font-weight:700;white-space:nowrap}.node.active{border-color:#3b765b;color:#e6fff2;box-shadow:0 0 24px rgba(82,242,163,.10)}.node.output{border-color:#33566a}.n1{left:5%;top:18%}.n2{left:5%;top:65%}.n3{left:34%;top:41%}.n4{left:56%;top:22%}.n5{left:56%;top:64%}.n6{left:79%;top:41%}.wire{position:absolute;height:1px;background:#2a3947;transform-origin:left center;z-index:1;transition:.25s}.wire.hot{background:linear-gradient(90deg,var(--green),var(--cyan));box-shadow:0 0 10px rgba(82,242,163,.45)}.w1{left:14%;top:31%;width:23%;transform:rotate(20deg)}.w2{left:14%;top:72%;width:23%;transform:rotate(-20deg)}.w3{left:43%;top:49%;width:15%;transform:rotate(-51deg)}.w4{left:43%;top:49%;width:15%;transform:rotate(51deg)}.w5{left:65%;top:32%;width:16%;transform:rotate(28deg)}.w6{left:65%;top:70%;width:16%;transform:rotate(-28deg)}
+.outputPanel{border:1px solid #1d2c38;border-radius:14px;background:linear-gradient(150deg,#0a1218,#080d12);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:22px}.outCode{color:#65788b;font-size:9px;letter-spacing:.14em;font-weight:900}.out{font-size:92px;line-height:1;font-weight:950;letter-spacing:-.08em;margin:8px 0}.out.on{color:var(--green);text-shadow:0 0 45px rgba(82,242,163,.2)}.out.off{color:#596878}.decision{max-width:210px;color:#8492a1;font-size:11px;line-height:1.6}.decision strong{color:#edf5f8}.metrics{width:100%;margin-top:22px;border-top:1px solid #192631}.metric{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #17222d;color:#607083;font-size:9px;font-weight:800}.metric b{color:#b7c5d2}.toolbar{display:flex;gap:8px;flex-wrap:wrap;padding:0 19px 17px}.control.primary{background:#eafff5;border-color:#eafff5;color:#06110b}.control:disabled{opacity:.45;cursor:not-allowed}
+.lifecycle{display:grid;grid-template-columns:repeat(4,1fr);padding:17px 19px;gap:9px}.life{position:relative;padding:14px;border:1px solid #1d2935;border-radius:12px;background:#0b1118}.life:after{content:"→";position:absolute;right:-10px;top:50%;transform:translateY(-50%);color:#405264;font-size:14px}.life:last-child:after{display:none}.lifeNo{font-size:9px;color:#5f7184;font-weight:900}.lifeTitle{margin-top:8px;font-size:13px;font-weight:900}.lifeText{margin-top:5px;color:#68788a;font-size:9px;line-height:1.5}
+.proof{display:grid;grid-template-columns:1.2fr .8fr;gap:0}.proofText{padding:18px 19px}.proofTitle{font-size:18px;font-weight:900;letter-spacing:-.03em}.proofText p{color:#758496;font-size:10px;line-height:1.7;margin:8px 0 15px}.links{display:flex;flex-wrap:wrap;gap:7px}.link{display:inline-flex;align-items:center;border:1px solid #263646;background:#101822;border-radius:8px;padding:8px 10px;color:#bdc9d4;font-size:9px;font-weight:900}.link:hover{border-color:#40566a;color:#fff}.addresses{border-left:1px solid var(--line);padding:18px 19px}.addrLabel{font-size:9px;color:#617284;font-weight:900;letter-spacing:.1em}.addr{margin-top:6px;padding:9px;border:1px solid #1c2935;background:#080d13;border-radius:8px;color:#aab8c5;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:8px;word-break:break-all}
+.tableWrap{overflow:auto}.truth{width:100%;border-collapse:collapse;min-width:520px}.truth th,.truth td{padding:11px 14px;text-align:center;border-bottom:1px solid #17222d;font-size:10px}.truth th{color:#5f7082;font-size:8px;letter-spacing:.12em;text-transform:uppercase}.truth tr.current{background:rgba(82,242,163,.045)}.truth tr.current td{color:#eafff4}.one{color:var(--green);font-weight:900}.zero{color:#657486;font-weight:800}.footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:13px 19px;color:#536375;font-size:9px}.footer code{color:#8292a2}
+.disclaimer{padding:14px 19px;color:#566677;font-size:9px;line-height:1.6;border-top:1px solid var(--line)}
+.pulse{animation:pulse .55s ease}@keyframes pulse{0%{transform:scale(.9);opacity:.4}65%{transform:scale(1.06);opacity:1}100%{transform:scale(1);opacity:1}}
+@media(max-width:900px){.stats{grid-template-columns:repeat(2,1fr)}.stat:nth-child(2){border-right:0}.stat:nth-child(-n+2){border-bottom:1px solid var(--line)}.execution,.proof{grid-template-columns:1fr}.addresses{border-left:0;border-top:1px solid var(--line)}.lifecycle{grid-template-columns:repeat(2,1fr)}.life:nth-child(2):after{display:none}}
+@media(max-width:650px){.shell{width:min(100% - 18px,1240px);padding-top:8px}.herohead{padding:34px 22px 28px}.body{padding:12px}.inputs{grid-template-columns:1fr;padding:12px}.stats{grid-template-columns:1fr 1fr}.stat{padding:15px}.execution{padding:12px}.canvas{height:315px}.node{width:78px;font-size:8px}.node small{font-size:6px}.n1,.n2{left:3%}.n3{left:29%}.n4,.n5{left:53%}.n6{left:77%}.lifecycle{grid-template-columns:1fr;padding:12px}.life:after{display:none!important}.hero h1{font-size:48px}.sectionHead{padding:14px 15px}.toolbar{padding:0 12px 12px}}
+</style>
 </head>
 <body>
-<div class="wrap">
-  <div class="topbar">
-    <div class="brand"><div class="mark">XB</div><span>XBOT / TAPEOUT</span></div>
-    <div class="badge"><span class="dot"></span> X LAYER · TEST</div>
+<div class="shell">
+<header class="nav">
+  <div class="brand"><div class="logo">XB</div><span>XBOT INTELLIGENCE PROCESSOR</span></div>
+  <div class="status"><span class="led"></span>X LAYER · TEST</div>
+</header>
+
+<main class="hero">
+<section class="herohead">
+  <div class="eyebrow">TAPEOUT CIRCUIT / ON-CHAIN LOGIC</div>
+  <h1>Intelligence, <span>made deterministic.</span></h1>
+  <p class="lead">A hardware-style consensus layer for XBOT. Three intelligence signals enter the processor; NAND logic deterministically decides whether two-of-three consensus is satisfied.</p>
+  <div class="heroMeta">
+    <div class="tag">CIRCUIT <strong>3.2.268</strong></div><div class="tag">NETWORK <strong>X Layer</strong></div><div class="tag">PRIMITIVE <strong>NAND</strong></div><div class="tag">FUNCTION <strong>2 / 3</strong></div>
   </div>
+</section>
 
-  <main class="hero">
-    <header class="herohead">
-      <div class="eyebrow">ON-CHAIN INTELLIGENCE PROCESSOR</div>
-      <h1>Consensus, reduced to logic.</h1>
-      <p>Operate the XBOT 2-of-3 consensus primitive interactively. Risk, Liquidity and Market are evaluated as binary intelligence signals. The circuit asserts consensus when at least two signals are high.</p>
-      <div class="meta">
-        <div class="chip">CIRCUIT <b>3.2.268</b></div>
-        <div class="chip">NETWORK <b>X Layer</b></div>
-        <div class="chip">LOGIC <b>NAND</b></div>
-        <div class="chip">FUNCTION <b>2 / 3</b></div>
-      </div>
-    </header>
+<section class="stats">
+  <div class="stat"><div class="statLabel">TRANSISTOR SUPPLY</div><div class="statValue">1,000,000,000</div><div class="statSub">disclosed at deployment</div></div>
+  <div class="stat"><div class="statLabel">UNIT MINT PRICE</div><div class="statValue">0.009 OKB</div><div class="statSub">excluding protocol fee</div></div>
+  <div class="stat"><div class="statLabel">PROCESSOR</div><div class="statValue green">DEPLOYED</div><div class="statSub">X Layer · TapeOut</div></div>
+  <div class="stat"><div class="statLabel">CIRCUIT STATUS</div><div class="statValue">TAPED OUT</div><div class="statSub">reference 3.2.268</div></div>
+</section>
 
-    <div class="content">
-      <section class="section">
-        <div class="sectionhead"><div class="sectiontitle">01 · Intelligence Inputs</div><div class="sectionhint">Set each signal to LOW or HIGH</div></div>
-        <div class="inputs">
-          <div class="signal" data-card="0"><div class="signaltop"><div class="siglabel">IN0</div><div class="statepill" data-state="0">LOW</div></div><div class="signame">Risk</div><div class="switch"><button data-input="0" data-value="0">0 · LOW</button><button data-input="0" data-value="1">1 · HIGH</button></div></div>
-          <div class="signal" data-card="1"><div class="signaltop"><div class="siglabel">IN1</div><div class="statepill" data-state="1">LOW</div></div><div class="signame">Liquidity</div><div class="switch"><button data-input="1" data-value="0">0 · LOW</button><button data-input="1" data-value="1">1 · HIGH</button></div></div>
-          <div class="signal" data-card="2"><div class="signaltop"><div class="siglabel">IN2</div><div class="statepill" data-state="2">LOW</div></div><div class="signame">Market</div><div class="switch"><button data-input="2" data-value="0">0 · LOW</button><button data-input="2" data-value="1">1 · HIGH</button></div></div>
-        </div>
-      </section>
+<div class="body">
+<section class="section">
+ <div class="sectionHead"><div class="sectionTitle"><span class="num">01</span> Intelligence inputs</div><div class="hint">Binary signal control</div></div>
+ <div class="inputs">
+  <div class="signal" data-card="0"><div class="sigTop"><span class="sigCode">IN0 / SIGNAL</span><span class="pill" data-state="0">LOW</span></div><div class="sigName">Risk</div><div class="switch"><button data-input="0" data-value="0">0 · LOW</button><button data-input="0" data-value="1">1 · HIGH</button></div></div>
+  <div class="signal" data-card="1"><div class="sigTop"><span class="sigCode">IN1 / SIGNAL</span><span class="pill" data-state="1">LOW</span></div><div class="sigName">Liquidity</div><div class="switch"><button data-input="1" data-value="0">0 · LOW</button><button data-input="1" data-value="1">1 · HIGH</button></div></div>
+  <div class="signal" data-card="2"><div class="sigTop"><span class="sigCode">IN2 / SIGNAL</span><span class="pill" data-state="2">LOW</span></div><div class="sigName">Market</div><div class="switch"><button data-input="2" data-value="0">0 · LOW</button><button data-input="2" data-value="1">1 · HIGH</button></div></div>
+ </div>
+</section>
 
-      <section class="section">
-        <div class="sectionhead"><div class="sectiontitle">02 · Processor Execution</div><div class="sectionhint">NAND-only evaluation path</div></div>
-        <div class="processor">
-          <div class="diagram" aria-label="XBOT NAND circuit visualization">
-            <div class="gridbg"></div>
-            <div class="nodes">
-              <div class="node n1" data-node="n1">N1 · NAND<small>Risk × Liquidity</small></div>
-              <div class="node n2" data-node="n2">N2 · NAND<small>Risk × Market</small></div>
-              <div class="node n3" data-node="n3">N3 · NAND<small>Liquidity × Market</small></div>
-              <div class="node n4" data-node="n4">N4 · NAND<small>N1 × N2</small></div>
-              <div class="node n5" data-node="n5">N5 · NAND<small>N4 × N4</small></div>
-              <div class="node n6 output" data-node="n6">OUT · NAND<small>N5 × N3</small></div>
-              <i class="wire w1" data-wire="w1"></i><i class="wire w2" data-wire="w2"></i><i class="wire w3" data-wire="w3"></i><i class="wire w4" data-wire="w4"></i><i class="wire w5" data-wire="w5"></i><i class="wire w6" data-wire="w6"></i>
-            </div>
-          </div>
-          <aside class="outpanel">
-            <div class="outlabel">OUT0 · XBOT CONSENSUS</div>
-            <div id="output" class="outvalue off">0</div>
-            <div id="status" class="decision">Consensus is <strong>not asserted</strong>.</div>
-            <div class="metric"><span>ACTIVE SIGNALS</span><b id="activeCount">0 / 3</b></div>
-            <div class="metric"><span>DECISION RULE</span><b>≥ 2 HIGH</b></div>
-          </aside>
-        </div>
-        <div class="toolbar">
-          <button id="runAll" class="btn primary">▶ Run 8-case verification</button>
-          <button id="reset" class="btn">Reset inputs</button>
-        </div>
-      </section>
+<section class="section">
+ <div class="sectionHead"><div class="sectionTitle"><span class="num">02</span> Processor execution</div><div class="hint">Live NAND path</div></div>
+ <div class="execution">
+  <div class="canvas">
+   <div class="grid"></div><div class="canvasLabel">XBOT / LOGIC FABRIC / LIVE</div>
+   <div class="node n1" data-node="n1">N1 · NAND<small>RISK × LIQUIDITY</small></div>
+   <div class="node n2" data-node="n2">N2 · NAND<small>RISK × MARKET</small></div>
+   <div class="node n3" data-node="n3">N3 · NAND<small>LIQUIDITY × MARKET</small></div>
+   <div class="node n4" data-node="n4">N4 · NAND<small>N1 × N2</small></div>
+   <div class="node n5" data-node="n5">N5 · NAND<small>N4 × N4</small></div>
+   <div class="node n6 output" data-node="n6">OUT · NAND<small>N5 × N3</small></div>
+   <i class="wire w1" data-wire="w1"></i><i class="wire w2" data-wire="w2"></i><i class="wire w3" data-wire="w3"></i><i class="wire w4" data-wire="w4"></i><i class="wire w5" data-wire="w5"></i><i class="wire w6" data-wire="w6"></i>
+  </div>
+  <aside class="outputPanel">
+   <div class="outCode">OUT0 / XBOT CONSENSUS</div><div id="output" class="out off">0</div><div id="status" class="decision">Consensus is <strong>not asserted</strong>.</div>
+   <div class="metrics"><div class="metric"><span>ACTIVE SIGNALS</span><b id="activeCount">0 / 3</b></div><div class="metric"><span>DECISION RULE</span><b>≥ 2 HIGH</b></div><div class="metric"><span>LOGIC</span><b>NAND</b></div></div>
+  </aside>
+ </div>
+ <div class="toolbar"><button id="runAll" class="control primary">▶ RUN 8-CASE VERIFICATION</button><button id="reset" class="control">RESET</button></div>
+</section>
 
-      <section class="section">
-        <div class="sectionhead"><div class="sectiontitle">03 · TapeOut Asset Lifecycle</div><div class="sectionhint">From primitive token to circuit</div></div>
-        <div style="padding:20px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
-          <div class="signal"><div class="siglabel">01 · MINT</div><div class="signame">Transistor</div><p class="sectionhint">ERC-1155 primitive minted at the disclosed unit price.</p></div>
-          <div class="signal"><div class="siglabel">02 · DESIGN</div><div class="signame">Wire Logic</div><p class="sectionhint">NAND primitives are composed into a deterministic netlist.</p></div>
-          <div class="signal"><div class="siglabel">03 · TAPE OUT</div><div class="signame">Burn → Build</div><p class="sectionhint">The design consumes its transistor assets.</p></div>
-          <div class="signal"><div class="siglabel">04 · RESULT</div><div class="signame">Circuit NFT</div><p class="sectionhint">A finished circuit becomes a reusable black-box building block.</p></div>
-        </div>
-      </section>
+<section class="section">
+ <div class="sectionHead"><div class="sectionTitle"><span class="num">03</span> TapeOut asset lifecycle</div><div class="hint">Primitive → reusable circuit</div></div>
+ <div class="lifecycle">
+  <div class="life"><div class="lifeNo">01 / MINT</div><div class="lifeTitle">Transistor asset</div><div class="lifeText">NAND/LATCH primitives are issued as TapeOut assets.</div></div>
+  <div class="life"><div class="lifeNo">02 / DESIGN</div><div class="lifeTitle">Logic composition</div><div class="lifeText">Primitive assets are connected into a deterministic circuit.</div></div>
+  <div class="life"><div class="lifeNo">03 / TAPE OUT</div><div class="lifeTitle">Burn → circuit</div><div class="lifeText">The completed design consumes its transistor requirement.</div></div>
+  <div class="life"><div class="lifeNo">04 / RESULT</div><div class="lifeTitle">Circuit NFT</div><div class="lifeText">The finished circuit can become a reusable black-box primitive.</div></div>
+ </div>
+</section>
 
-      <section class="section">
-        <div class="sectionhead"><div class="sectiontitle">04 · Economic & Security Surface</div><div class="sectionhint">Transparent project parameters</div></div>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:18px 20px">
-          <div class="signal"><div class="siglabel">SUPPLY CAP</div><div class="signame">1,000,000,000</div><p class="sectionhint">XBOT transistor units disclosed at deployment.</p></div>
-          <div class="signal"><div class="siglabel">UNIT PRICE</div><div class="signame">0.009 OKB</div><p class="sectionhint">Fixed disclosed mint price, excluding protocol fee.</p></div>
-          <div class="signal"><div class="siglabel">MAX GROSS MINT VALUE</div><div class="signame">9,000,000 OKB</div><p class="sectionhint">Simple cap × price calculation if the full supply were minted; not a revenue forecast.</p></div>
-        </div>
-        <div style="display:flex;flex-wrap:wrap;gap:8px;padding:0 20px 20px">
-          <div class="chip">✓ Deterministic NAND evaluation</div><div class="chip">✓ No API keys in client</div><div class="chip">✓ Contract addresses disclosed</div><div class="chip">✓ No private-key operations</div><div class="chip">! Experimental · not audited</div>
-        </div>
-      </section>
+<section class="section">
+ <div class="sectionHead"><div class="sectionTitle"><span class="num">04</span> On-chain proof</div><div class="hint">Public deployment references</div></div>
+ <div class="proof">
+  <div class="proofText"><div class="proofTitle">Verify the deployment.</div><p>Every critical project reference is exposed for independent inspection. No wallet signing or private credentials are required by this demo.</p><div class="links"><a class="link" href="https://www.oklink.com/x-layer/evm/address/0xa5fc69Ca2D3d462CCa204D894D85ac8071c4F0f0" target="_blank" rel="noopener">PROCESSOR ↗</a><a class="link" href="https://www.oklink.com/x-layer/evm/address/0x7bE7280e31984d18f62218519985EC5DcCa751De" target="_blank" rel="noopener">TRANSISTORS ↗</a><a class="link" href="https://www.tapeout.net/" target="_blank" rel="noopener">TAPEOUT ↗</a><a class="link" href="https://www.okx.com/xlayer" target="_blank" rel="noopener">X LAYER ↗</a></div></div>
+  <div class="addresses"><div class="addrLabel">PROCESSOR CONTRACT</div><div class="addr">0xa5fc69Ca2D3d462CCa204D894D85ac8071c4F0f0</div><div class="addrLabel" style="margin-top:13px">TRANSISTOR CONTRACT</div><div class="addr">0x7bE7280e31984d18f62218519985EC5DcCa751De</div></div>
+ </div>
+</section>
 
-      <section class="section">
-        <div class="sectionhead"><div class="sectiontitle">05 · On-Chain Proof Surface</div><div class="sectionhint">Open the deployed assets in an X Layer explorer</div></div>
-        <div style="padding:18px 20px;display:flex;flex-wrap:wrap;gap:10px">
-          <a class="btn" href="https://www.oklink.com/x-layer/evm/address/0xa5fc69Ca2D3d462CCa204D894D85ac8071c4F0f0" target="_blank" rel="noopener">Processor contract ↗</a>
-          <a class="btn" href="https://www.oklink.com/x-layer/evm/address/0x7bE7280e31984d18f62218519985EC5DcCa751De" target="_blank" rel="noopener">Transistor contract ↗</a>
-          <a class="btn" href="https://www.tapeout.net/" target="_blank" rel="noopener">TapeOut protocol ↗</a>
-          <a class="btn" href="https://www.okx.com/xlayer" target="_blank" rel="noopener">X Layer ↗</a>
-        </div>
-      </section>
+<section class="section">
+ <div class="sectionHead"><div class="sectionTitle"><span class="num">05</span> Verification matrix</div><div class="hint">Complete 2-of-3 state space</div></div>
+ <div class="tableWrap"><table class="truth"><thead><tr><th>Risk</th><th>Liquidity</th><th>Market</th><th>Expected OUT</th><th>State</th></tr></thead><tbody id="truthTable"></tbody></table></div>
+ <div class="footer"><span>Deterministic client-side verification · no API keys required</span><span>TAPEOUT CIRCUIT <code>3.2.268</code></span></div>
+</section>
 
-      <section class="section">
-        <div class="sectionhead"><div class="sectiontitle">06 · Verification Matrix</div><div class="sectionhint">All 8 possible input states</div></div>
-        <div class="tablewrap">
-          <table class="truth"><thead><tr><th>Risk</th><th>Liquidity</th><th>Market</th><th>Expected OUT</th><th>State</th></tr></thead><tbody id="truthTable"></tbody></table>
-        </div>
-        <div class="footerline"><span>Deterministic client-side verification · no API keys required</span><span>TapeOut reference <code>3.2.268</code></span></div>
-      </section>
-    </div>
-  </main>
+<div class="disclaimer">XBOT Intelligence Processor is an experimental digital-logic project. The consensus circuit is a deterministic demonstration and is not financial advice, a trading strategy, or a guarantee of token performance. Contract security has not been represented as independently audited.</div>
+</div>
+</main>
 </div>
 <script src="./app.js"></script>
 </body>
