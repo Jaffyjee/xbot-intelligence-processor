@@ -288,6 +288,141 @@ body:after{animation:scanSweep 9s linear infinite}
  [data-reveal]{opacity:1!important;transform:none!important;transition:none!important}
  .control:hover,.link:hover,.signal:hover,.life:hover,.chainMetric:hover,.mintCard:hover,.socialCard:hover{transform:none}
 }
+
+/* XBOT // universal responsive layout */
+*,*::before,*::after{min-width:0}
+img,svg,video,canvas{max-width:100%;height:auto}
+body{width:100%;overflow-x:hidden}
+.shell{width:min(1240px,calc(100% - 32px));}
+.herohead{padding:clamp(30px,5vw,52px) clamp(20px,4vw,46px) clamp(26px,3.5vw,38px)}
+.hero h1{font-size:clamp(38px,7vw,78px);overflow-wrap:anywhere}
+.hero .lead{font-size:clamp(13px,1.4vw,15px)}
+.body{padding:clamp(12px,2vw,24px)}
+.inputs{grid-template-columns:repeat(3,minmax(0,1fr))}
+.execution{grid-template-columns:minmax(0,1fr) minmax(230px,275px)}
+.canvas{width:100%;max-width:100%}
+.lifecycle{grid-template-columns:repeat(4,minmax(0,1fr))}
+.liveGrid{grid-template-columns:minmax(0,1.25fr) minmax(260px,.75fr)}
+.mintGrid{grid-template-columns:minmax(0,1.15fr) minmax(260px,.85fr)}
+.proof{grid-template-columns:minmax(0,1.2fr) minmax(260px,.8fr)}
+.socialCard{min-width:0}
+.socialCard small{overflow:hidden;text-overflow:ellipsis}
+.tableWrap{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.truth{min-width:500px}
+
+/* Large tablets / small laptops */
+@media (max-width:1100px){
+  .shell{width:min(100% - 28px,1100px)}
+  .hero h1{font-size:clamp(42px,6.5vw,68px)}
+  .execution{grid-template-columns:minmax(0,1fr) 245px}
+  .liveGrid,.mintGrid{grid-template-columns:minmax(0,1fr) minmax(230px,.7fr)}
+}
+
+/* Tablets */
+@media (max-width:900px){
+  .shell{width:min(100% - 24px,760px)}
+  .nav{height:auto;min-height:58px;flex-wrap:wrap;padding:7px 0}
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .stat:nth-child(2){border-right:0}
+  .stat:nth-child(-n+2){border-bottom:1px solid var(--line)}
+  .inputs{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .execution,.proof,.liveGrid,.mintGrid{grid-template-columns:1fr}
+  .addresses{border-left:0;border-top:1px solid var(--line)}
+  .lifecycle{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .life:nth-child(2):after{display:none}
+  .liveSide{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .chainMetric.wide,.liveNote{grid-column:1/-1}
+}
+
+/* Phones */
+@media (max-width:650px){
+  .shell{width:calc(100% - 16px);padding:6px 0 42px}
+  .nav{gap:8px}
+  .brand{font-size:11px;gap:7px}
+  .logo{width:31px;height:31px}
+  .status{font-size:9px;padding:6px 8px}
+  .hero{margin-top:10px;border-radius:18px}
+  .herohead{padding:30px 18px 24px}
+  .hero h1{font-size:clamp(36px,12vw,52px);line-height:.95;letter-spacing:-.055em}
+  .hero .lead{font-size:13px;line-height:1.65}
+  .heroMeta{gap:6px;margin-top:19px}
+  .tag{font-size:9px;padding:7px 8px}
+  .stats{grid-template-columns:1fr 1fr}
+  .stat{padding:13px 11px}
+  .statLabel{font-size:7px}
+  .statValue{font-size:14px;line-height:1.2;overflow-wrap:anywhere}
+  .statSub{font-size:8px}
+  .body{padding:8px}
+  .section{border-radius:14px;margin-bottom:10px}
+  .sectionHead{padding:13px 12px;align-items:flex-start}
+  .sectionTitle{font-size:10px}
+  .hint{font-size:8px;text-align:right}
+  .inputs{grid-template-columns:1fr;padding:10px;gap:8px}
+  .signal{padding:12px}
+  .sigName{font-size:15px;margin-top:9px}
+  .switch{margin-top:10px}
+  .switch button,.control{min-height:40px;padding:9px 8px}
+  .execution{padding:10px;gap:9px}
+  .canvas{height:330px}
+  .node{width:70px;padding:8px 5px;font-size:7px}
+  .node small{font-size:5.5px}
+  .n1,.n2{left:2%}
+  .n3{left:27%}
+  .n4,.n5{left:51%}
+  .n6{left:76%}
+  .outputPanel{min-height:290px}
+  .out{font-size:76px}
+  .toolbar{padding:0 10px 10px}
+  .toolbar .control{flex:1 1 140px}
+  .lifecycle{grid-template-columns:1fr;padding:10px}
+  .life{padding:12px}
+  .life:after{display:none!important}
+  .proofText,.addresses{padding:15px 13px}
+  .proofTitle{font-size:17px}
+  .liveGrid,.mintGrid{padding:10px}
+  .liveSide{grid-template-columns:1fr 1fr}
+  .chainMetric{padding:11px}
+  .chainMetricValue{font-size:16px}
+  .flow{grid-template-columns:auto minmax(0,1fr);padding:10px}
+  .flowAmount{grid-column:2;text-align:left}
+  .liveFeedList{max-height:330px}
+  .mintCard{padding:15px}
+  .mintTitle{font-size:21px}
+  .quantityInput{font-size:20px;padding:12px}
+  .costBox{grid-template-columns:1fr 1fr}
+  .socialCard{padding:11px}
+  .footer{padding:11px 13px}
+}
+
+/* Very small phones */
+@media (max-width:390px){
+  .shell{width:calc(100% - 12px)}
+  .herohead{padding:25px 14px 20px}
+  .hero h1{font-size:34px}
+  .stats{grid-template-columns:1fr}
+  .stat,.stat:nth-child(-n+2){border-right:0;border-bottom:1px solid var(--line)}
+  .stat:last-child{border-bottom:0}
+  .heroMeta{display:grid;grid-template-columns:1fr 1fr}
+  .tag{min-width:0}
+  .liveSide{grid-template-columns:1fr}
+  .costBox{grid-template-columns:1fr}
+  .flowMeta{white-space:normal}
+  .flowAmount{grid-column:2}
+  .sectionHead{gap:7px}
+}
+
+/* Landscape phones */
+@media (max-height:500px) and (orientation:landscape) and (max-width:900px){
+  .herohead{padding-top:22px;padding-bottom:20px}
+  .hero h1{font-size:42px}
+  .canvas{height:280px}
+}
+
+/* Avoid hover transforms on touch devices */
+@media (hover:none){
+  .section:hover,.signal:hover,.life:hover,.chainMetric:hover,.mintCard:hover,.socialCard:hover{transform:none;box-shadow:none}
+  .control:hover,.link:hover{transform:none}
+}
 </style>
 </head>
 <body>
