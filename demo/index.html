@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>XBOT Consensus Demo</title>
+  <meta name="description" content="Interactive XBOT 2-of-3 consensus circuit demonstration.">
+  <style>
+    :root { color-scheme: dark; font-family: Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    body { margin:0; min-height:100vh; background:#080b12; color:#f4f7fb; }
+    main { width:min(980px,calc(100% - 32px)); margin:0 auto; padding:48px 0; }
+    .hero { padding:28px; border:1px solid #202838; border-radius:20px; background:#0e131d; }
+    h1 { margin:0 0 8px; font-size:clamp(32px,6vw,56px); }
+    .muted { color:#9ca8b8; }
+    .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin:24px 0; }
+    .input { padding:20px; border:1px solid #273244; border-radius:16px; background:#111824; }
+    .input h2 { margin:0 0 14px; font-size:16px; }
+    button { border:1px solid #344156; border-radius:10px; background:#182131; color:#fff; padding:10px 16px; cursor:pointer; font-weight:700; }
+    button.active { background:#fff; color:#080b12; }
+    .output { text-align:center; padding:28px; border:1px solid #273244; border-radius:18px; background:#0b1018; }
+    .value { font-size:64px; font-weight:900; margin:4px 0; }
+    .on { color:#69f0ae; } .off { color:#ff7b86; }
+    .actions { display:flex; gap:10px; flex-wrap:wrap; margin:18px 0; }
+    table { width:100%; border-collapse:collapse; margin-top:22px; overflow:hidden; border-radius:14px; }
+    th,td { padding:11px; border-bottom:1px solid #202838; text-align:center; }
+    th { color:#9ca8b8; font-size:13px; }
+    tr.current { background:#172131; font-weight:800; }
+    code { color:#cdd7e5; }
+    @media(max-width:650px){ .grid{grid-template-columns:1fr;} }
+  </style>
+</head>
+<body>
+<main>
+  <section class="hero">
+    <p class="muted">XBOT INTELLIGENCE PROCESSOR</p>
+    <h1>2-of-3 Consensus</h1>
+    <p class="muted">Interactive simulation of the Risk + Liquidity + Market consensus primitive documented in this repository.</p>
+
+    <div class="grid">
+      <div class="input"><h2>IN0 · Risk</h2><button data-input="0" data-value="0">0</button> <button data-input="0" data-value="1">1</button></div>
+      <div class="input"><h2>IN1 · Liquidity</h2><button data-input="1" data-value="0">0</button> <button data-input="1" data-value="1">1</button></div>
+      <div class="input"><h2>IN2 · Market</h2><button data-input="2" data-value="0">0</button> <button data-input="2" data-value="1">1</button></div>
+    </div>
+
+    <div class="output">
+      <div class="muted">OUT0 · XBOT CONSENSUS</div>
+      <div id="output" class="value off">0</div>
+      <div id="status" class="muted">Less than two signals are active.</div>
+    </div>
+
+    <div class="actions">
+      <button id="runAll">Run all 8 cases</button>
+      <button id="reset">Reset</button>
+    </div>
+
+    <table>
+      <thead><tr><th>Risk</th><th>Liquidity</th><th>Market</th><th>Consensus</th></tr></thead>
+      <tbody id="truthTable"></tbody>
+    </table>
+
+    <p class="muted">Circuit reference: <code>3.2.268</code> · Network: <code>X Layer</code></p>
+  </section>
+</main>
+<script src="./app.js"></script>
+</body>
+</html>
