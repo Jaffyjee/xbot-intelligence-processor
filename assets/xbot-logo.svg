@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+<title id="title">XBOT logo</title><desc id="desc">Glossy black and white circular XBOT mark with two black rounded slots.</desc>
+<defs>
+  <radialGradient id="outer" cx="50%" cy="42%" r="58%"><stop offset="0" stop-color="#1d2430"/><stop offset=".68" stop-color="#05070b"/><stop offset="1" stop-color="#000"/></radialGradient>
+  <radialGradient id="inner" cx="42%" cy="30%" r="78%"><stop offset="0" stop-color="#fff"/><stop offset=".56" stop-color="#f7f8fb"/><stop offset=".86" stop-color="#cdd3de"/><stop offset="1" stop-color="#8e98a8"/></radialGradient>
+  <linearGradient id="rim" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff"/><stop offset=".28" stop-color="#8da0bb"/><stop offset=".52" stop-color="#fff"/><stop offset=".8" stop-color="#607188"/><stop offset="1" stop-color="#fff"/></linearGradient>
+  <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="9"/></filter>
+  <filter id="glow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="3"/></filter>
+</defs>
+<circle cx="256" cy="270" r="215" fill="#000" opacity=".7" filter="url(#shadow)"/>
+<circle cx="256" cy="256" r="221" fill="url(#outer)" stroke="url(#rim)" stroke-width="7"/>
+<circle cx="256" cy="256" r="209" fill="none" stroke="#d9e6f8" stroke-opacity=".34" stroke-width="3"/>
+<path d="M95 149c18-35 49-64 85-81M332 70c39 17 69 45 87 80M93 363c18 37 48 66 86 83M335 445c36-17 66-46 84-81" fill="none" stroke="#f4f8ff" stroke-opacity=".5" stroke-width="5" stroke-linecap="round" filter="url(#glow)"/>
+<circle cx="256" cy="256" r="169" fill="url(#inner)" stroke="#f8fbff" stroke-width="4"/>
+<ellipse cx="213" cy="184" rx="105" ry="62" fill="#fff" opacity=".17"/>
+<g fill="#05070b" stroke="#111722" stroke-width="3">
+  <rect x="179" y="163" width="57" height="118" rx="28.5" transform="rotate(-25 207.5 222)"/>
+  <rect x="276" y="127" width="57" height="118" rx="28.5" transform="rotate(-25 304.5 186)"/>
+</g>
+<path d="M188 184c7-11 16-17 27-21M286 148c8-11 17-17 28-21" fill="none" stroke="#566273" stroke-width="4" stroke-linecap="round" opacity=".55"/>
+</svg>
