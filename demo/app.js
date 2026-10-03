@@ -60,7 +60,6 @@ const XBOT_CONTRACT = TRANSISTOR_CONTRACT;
 const XBOT_UNIT_PRICE_WEI = 9000000000000000n; // 0.009 OKB
 const XBOT_FALLBACK_PROTOCOL_FEE_WEI = 660000000000000n; // observed XBOT UI quote: 0.00066 OKB
 const MINT_UINT_SELECTOR = "0xa0712d68"; // mint(uint256)
-const MINT_ID_AMOUNT_SELECTOR = "0x"; // resolved by estimation below
 let walletAccount = null;
 let walletProvider = null;
 let mintProtocolFeeWei = XBOT_FALLBACK_PROTOCOL_FEE_WEI;
@@ -153,20 +152,16 @@ async function connectWallet() {
 }
 
 async function estimateMintData(quantity, valueHex) {
-  const candidates = [
-    { label: "mint(quantity)", data: MINT_UINT_SELECTOR + hex32(quantity) },
-    { label: "mint(NAND, quantity)", data: "0x" + "9c6f6f1d" + hex32(0) + hex32(quantity) }
-  ];
-  for (const candidate of candidates) {
-    try {
-      await walletProvider.request({
-        method: "eth_estimateGas",
-        params: [{ from: walletAccount, to: XBOT_CONTRACT, value: valueHex, data: candidate.data }]
-      });
-      return candidate;
-    } catch {}
+  const candidate = { label: "mint(quantity)", data: MINT_UINT_SELECTOR + hex32(quantity) };
+  try {
+    await walletProvider.request({
+      method: "eth_estimateGas",
+      params: [{ from: walletAccount, to: XBOT_CONTRACT, value: valueHex, data: candidate.data }]
+    });
+    return candidate;
+  } catch {
+    throw new Error("The deployed XBOT transistor contract did not accept the expected mint(quantity) call. No transaction was sent.");
   }
-  throw new Error("The XBOT transistor mint function could not be verified on the deployed contract. No transaction was sent.");
 }
 
 async function mintXBOT() {
