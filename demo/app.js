@@ -50,7 +50,204 @@ function render() {
       : "Consensus is not asserted: fewer than two intelligence signals are HIGH."
   );
 
-  document.querySelectorAll("[data-input]").forEach(button => {
+  
+/* -----------------------------
+   XBOT direct wallet mint
+   ----------------------------- */
+const XBOT_CHAIN_ID = "0xc4"; // 196
+const XBOT_CHAIN_HEX = "0xc4";
+const XBOT_CONTRACT = TRANSISTOR_CONTRACT;
+const XBOT_UNIT_PRICE_WEI = 9000000000000000n; // 0.009 OKB
+const XBOT_FALLBACK_PROTOCOL_FEE_WEI = 660000000000000n; // observed XBOT UI quote: 0.00066 OKB
+const MINT_UINT_SELECTOR = "0xa0712d68"; // mint(uint256)
+const MINT_ID_AMOUNT_SELECTOR = "0x"; // resolved by estimation below
+let walletAccount = null;
+let walletProvider = null;
+let mintProtocolFeeWei = XBOT_FALLBACK_PROTOCOL_FEE_WEI;
+
+function hex32(n) {
+  return BigInt(n).toString(16).padStart(64, "0");
+}
+function weiToOkb(wei) {
+  const n = typeof wei === "bigint" ? wei : BigInt(wei || 0);
+  const whole = n / 1000000000000000n;
+  const frac = (n % 1000000000000000n).toString().padStart(15, "0").slice(0, 6);
+  return whole.toString() + "." + frac.replace(/0+$/, "").padEnd(1, "0");
+}
+function setMintStatus(text, type = "") {
+  const el = document.getElementById("mintStatus");
+  if (el) { el.textContent = text; el.className = "mintStatus " + type; }
+}
+function shortWallet(a) { return a ? a.slice(0,6) + "…" + a.slice(-4) : "Not connected"; }
+
+async function ensureXLayer() {
+  if (!walletProvider) return false;
+  const chain = await walletProvider.request({ method: "eth_chainId" });
+  if (chain === XBOT_CHAIN_ID) return true;
+  try {
+    await walletProvider.request({ method: "wallet_switchEthereumChain", params: [{ chainId: XBOT_CHAIN_ID }] });
+    return true;
+  } catch (error) {
+    if (error?.code === 4902) {
+      await walletProvider.request({
+        method: "wallet_addEthereumChain",
+        params: [{
+          chainId: XBOT_CHAIN_ID,
+          chainName: "X Layer",
+          nativeCurrency: { name: "OKB", symbol: "OKB", decimals: 18 },
+          rpcUrls: [X_LAYER_HTTP],
+          blockExplorerUrls: ["https://www.oklink.com/x-layer"]
+        }]
+      });
+      return true;
+    }
+    throw error;
+  }
+}
+
+async function readProtocolFee() {
+  try {
+    const result = await walletProvider.request({
+      method: "eth_call",
+      params: [{ to: XBOT_CONTRACT, data: "0xb0e21e8a" }, "latest"]
+    });
+    if (result && result !== "0x") {
+      const fee = BigInt(result);
+      if (fee >= 0n && fee < 1000000000000000000n) mintProtocolFeeWei = fee;
+    }
+  } catch {}
+}
+
+function updateMintQuote() {
+  const input = document.getElementById("mintQuantity");
+  if (!input) return;
+  let q = Math.floor(Number(input.value || 1));
+  q = Math.max(1, Math.min(1000000000, q));
+  input.value = q;
+  const total = XBOT_UNIT_PRICE_WEI * BigInt(q) + mintProtocolFeeWei;
+  setText("mintUnitPrice", "0.009 OKB");
+  setText("mintTotalPrice", weiToOkb(total) + " OKB");
+}
+
+async function connectWallet() {
+  if (!window.ethereum) {
+    setMintStatus("No EVM wallet detected. Open this page in MetaMask, OKX Wallet, or another compatible wallet.", "error");
+    return;
+  }
+  walletProvider = window.ethereum;
+  try {
+    const accounts = await walletProvider.request({ method: "eth_requestAccounts" });
+    walletAccount = accounts?.[0];
+    if (!walletAccount) throw new Error("No wallet account returned.");
+    await ensureXLayer();
+    await readProtocolFee();
+    const balance = await walletProvider.request({ method: "eth_getBalance", params: [walletAccount, "latest"] });
+    document.getElementById("walletAddress").textContent = shortWallet(walletAccount) + " · " + weiToOkb(BigInt(balance)) + " OKB";
+    document.getElementById("connectWallet").textContent = "CONNECTED";
+    document.getElementById("mintButton").textContent = "MINT XBOT TRANSISTORS";
+    setMintStatus("Wallet connected. Review the quantity and total, then confirm the transaction in your wallet.", "");
+    updateMintQuote();
+  } catch (error) {
+    setMintStatus(error?.message || "Wallet connection cancelled.", "error");
+  }
+}
+
+async function estimateMintData(quantity, valueHex) {
+  const candidates = [
+    { label: "mint(quantity)", data: MINT_UINT_SELECTOR + hex32(quantity) },
+    { label: "mint(NAND, quantity)", data: "0x" + "9c6f6f1d" + hex32(0) + hex32(quantity) }
+  ];
+  for (const candidate of candidates) {
+    try {
+      await walletProvider.request({
+        method: "eth_estimateGas",
+        params: [{ from: walletAccount, to: XBOT_CONTRACT, value: valueHex, data: candidate.data }]
+      });
+      return candidate;
+    } catch {}
+  }
+  throw new Error("The XBOT transistor mint function could not be verified on the deployed contract. No transaction was sent.");
+}
+
+async function mintXBOT() {
+  if (!walletProvider || !walletAccount) { await connectWallet(); return; }
+  const input = document.getElementById("mintQuantity");
+  const quantity = Math.floor(Number(input.value || 0));
+  if (!Number.isSafeInteger(quantity) || quantity < 1 || quantity > 1000000000) {
+    setMintStatus("Enter a whole-number quantity between 1 and 1,000,000,000.", "error");
+    return;
+  }
+
+  const button = document.getElementById("mintButton");
+  button.disabled = true;
+  try {
+    await ensureXLayer();
+    await readProtocolFee();
+    updateMintQuote();
+    const total = XBOT_UNIT_PRICE_WEI * BigInt(quantity) + mintProtocolFeeWei;
+    const valueHex = "0x" + total.toString(16);
+    setMintStatus("Checking the live contract before asking your wallet to sign…");
+    const candidate = await estimateMintData(quantity, valueHex);
+    setMintStatus("Ready. Confirm the X Layer transaction in your wallet…");
+    const txHash = await walletProvider.request({
+      method: "eth_sendTransaction",
+      params: [{ from: walletAccount, to: XBOT_CONTRACT, value: valueHex, data: candidate.data }]
+    });
+    setMintStatus("Transaction submitted. Waiting for on-chain confirmation…");
+    await waitForReceipt(txHash);
+    showMintSuccess(quantity, txHash);
+    setMintStatus("Mint confirmed successfully on X Layer.", "success");
+    await loadRecentMints();
+  } catch (error) {
+    if (error?.code === 4001) setMintStatus("Transaction cancelled in wallet.", "error");
+    else setMintStatus(error?.message || "Mint failed. No completed purchase was recorded.", "error");
+  } finally {
+    button.disabled = false;
+  }
+}
+
+async function waitForReceipt(txHash) {
+  for (let i = 0; i < 120; i++) {
+    const receipt = await rpc("eth_getTransactionReceipt", [txHash]);
+    if (receipt) {
+      if (receipt.status === "0x0") throw new Error("The transaction was mined but reverted. No transistor was minted.");
+      return receipt;
+    }
+    await new Promise(r => setTimeout(r, 2000));
+  }
+  throw new Error("Confirmation is taking longer than expected. Check the transaction on OKLink.");
+}
+
+function showMintSuccess(quantity, txHash) {
+  const modal = document.getElementById("mintSuccessModal");
+  setText("mintSuccessAmount", "+" + quantity.toLocaleString() + " XBOT Transistor" + (quantity === 1 ? "" : "s"));
+  const tx = document.getElementById("mintSuccessTx");
+  tx.href = "https://www.oklink.com/x-layer/tx/" + txHash;
+  tx.textContent = "View confirmed transaction ↗";
+  modal.classList.add("open");
+}
+function closeMintSuccess() { document.getElementById("mintSuccessModal")?.classList.remove("open"); }
+
+document.getElementById("connectWallet")?.addEventListener("click", connectWallet);
+document.getElementById("mintButton")?.addEventListener("click", mintXBOT);
+document.getElementById("mintQuantity")?.addEventListener("input", updateMintQuote);
+document.getElementById("closeMintSuccess")?.addEventListener("click", closeMintSuccess);
+document.getElementById("mintSuccessModal")?.addEventListener("click", e => { if (e.target.id === "mintSuccessModal") closeMintSuccess(); });
+if (window.ethereum) {
+  window.ethereum.on?.("accountsChanged", accounts => {
+    walletAccount = accounts?.[0] || null;
+    if (!walletAccount) {
+      setText("walletAddress", "Not connected");
+      setText("connectWallet", "CONNECT WALLET");
+      setText("mintButton", "CONNECT WALLET TO MINT");
+    } else connectWallet();
+  });
+  window.ethereum.on?.("chainChanged", () => { if (walletAccount) connectWallet(); });
+}
+updateMintQuote();
+
+
+document.querySelectorAll("[data-input]").forEach(button => {
     const input = Number(button.dataset.input);
     const value = Number(button.dataset.value);
     const isActive = state[input] === value;
