@@ -26,6 +26,31 @@ a{text-decoration:none;color:inherit}button{font:inherit}.skip{position:absolute
 .pulse{animation:pulse .55s ease}@keyframes pulse{0%{transform:scale(.9);opacity:.4}65%{transform:scale(1.06);opacity:1}100%{transform:scale(1);opacity:1}}
 @media(max-width:900px){.stats{grid-template-columns:repeat(2,1fr)}.stat:nth-child(2){border-right:0}.stat:nth-child(-n+2){border-bottom:1px solid var(--line)}.execution,.proof{grid-template-columns:1fr}.addresses{border-left:0;border-top:1px solid var(--line)}.lifecycle{grid-template-columns:repeat(2,1fr)}.life:nth-child(2):after{display:none}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation:none!important;transition:none!important}}\n@media(max-width:650px){.shell{width:min(100% - 18px,1240px);padding-top:8px}.herohead{padding:34px 22px 28px}.body{padding:12px}.inputs{grid-template-columns:1fr;padding:12px}.stats{grid-template-columns:1fr 1fr}.stat{padding:15px}.execution{padding:12px}.canvas{height:315px}.node{width:78px;font-size:8px}.node small{font-size:6px}.n1,.n2{left:3%}.n3{left:29%}.n4,.n5{left:53%}.n6{left:77%}.lifecycle{grid-template-columns:1fr;padding:12px}.life:after{display:none!important}.hero h1{font-size:48px}.sectionHead{padding:14px 15px}.toolbar{padding:0 12px 12px}}
+
+.liveGrid{display:grid;grid-template-columns:1.25fr .75fr;gap:13px;padding:16px 19px}
+.liveFeed{border:1px solid #182532;border-radius:14px;background:#070b10;overflow:hidden}
+.liveToolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-bottom:1px solid #182532}
+.liveConnection{display:flex;align-items:center;gap:8px;color:#9aa9b8;font-size:9px;font-weight:900;letter-spacing:.08em}
+.liveDot{width:7px;height:7px;border-radius:50%;background:#657486}.liveDot.on{background:var(--green);box-shadow:0 0 13px rgba(82,242,163,.8)}.liveDot.warn{background:#ffd166}
+.liveFeedList{max-height:360px;overflow:auto}
+.flow{display:grid;grid-template-columns:auto 1fr auto;gap:11px;align-items:center;padding:12px 14px;border-bottom:1px solid #111c26}
+.flow:last-child{border-bottom:0}.flowNew{animation:flowIn .45s ease}
+.flowIcon{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;border:1px solid #214d3a;background:#0b2017;color:var(--green);font-size:10px;font-weight:950}
+.flowMain{min-width:0}.flowTitle{font-size:11px;font-weight:900;color:#e8f1f5}.flowMeta{margin-top:4px;color:#627385;font-size:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.flowMeta code{color:#8d9dad}
+.flowAmount{text-align:right}.flowAmount strong{display:block;color:#bfead3;font-size:11px}.flowAmount span{display:block;margin-top:3px;color:#58697b;font-size:8px}
+.emptyFlow{padding:36px 18px;text-align:center;color:#617184;font-size:10px;line-height:1.6}
+.liveSide{display:grid;grid-template-columns:1fr 1fr;gap:9px;align-content:start}
+.chainMetric{border:1px solid #1d2936;background:linear-gradient(150deg,#0c1219,#0a0f15);border-radius:12px;padding:14px}
+.chainMetricLabel{font-size:8px;letter-spacing:.12em;color:#607184;font-weight:900}.chainMetricValue{margin-top:7px;font-size:19px;font-weight:950;letter-spacing:-.03em}.chainMetricSub{margin-top:4px;color:#596a7b;font-size:8px}
+.chainMetric.wide{grid-column:1/-1}
+.liveActions{display:flex;gap:7px;flex-wrap:wrap;margin-top:2px}
+.liveNote{grid-column:1/-1;padding:11px 13px;border:1px solid #1c2a36;border-radius:10px;background:#080d13;color:#607184;font-size:8px;line-height:1.6}
+.liveNote strong{color:#a9b7c4}
+@keyframes flowIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:900px){.liveGrid{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.flowNew{animation:none}}
+@media(max-width:650px){.liveGrid{padding:12px}.liveSide{grid-template-columns:1fr 1fr}.flow{grid-template-columns:auto 1fr}.flowAmount{grid-column:2;text-align:left}.liveFeedList{max-height:320px}}
+
 </style>
 </head>
 <body>
@@ -114,8 +139,38 @@ a{text-decoration:none;color:inherit}button{font:inherit}.skip{position:absolute
  </div>
 </section>
 
+
+<section class="section" id="live-flow" aria-labelledby="live-flow-title">
+ <div class="sectionHead"><div class="sectionTitle" id="live-flow-title"><span class="num">03</span> Live X Layer flow</div><div class="hint">ERC-1155 mint activity · no API key</div></div>
+ <div class="liveGrid">
+  <div class="liveFeed">
+   <div class="liveToolbar">
+    <div class="liveConnection"><span id="liveDot" class="liveDot"></span><span id="liveConnection">CONNECTING TO X LAYER</span></div>
+    <button id="refreshLive" class="control" type="button">↻ REFRESH</button>
+   </div>
+   <div id="mintFeed" class="liveFeedList" aria-live="polite" aria-label="Live XBOT transistor mint feed">
+    <div class="emptyFlow">Connecting to the X Layer public RPC and loading transistor mint history…</div>
+   </div>
+  </div>
+  <aside class="liveSide">
+   <div class="chainMetric"><div class="chainMetricLabel">LIVE BLOCK</div><div id="liveBlock" class="chainMetricValue">—</div><div class="chainMetricSub">X Layer · chain 196</div></div>
+   <div class="chainMetric"><div class="chainMetricLabel">MINT EVENTS</div><div id="mintCount" class="chainMetricValue">—</div><div class="chainMetricSub">observed by this tracker</div></div>
+   <div class="chainMetric wide"><div class="chainMetricLabel">TRANSISTORS OBSERVED</div><div id="mintUnits" class="chainMetricValue">—</div><div class="chainMetricSub">sum of ERC-1155 mint quantities visible to the tracker</div></div>
+   <div class="chainMetric wide">
+    <div class="chainMetricLabel">CONTRACT</div>
+    <div style="margin-top:8px;padding:9px;border:1px solid #1c2935;background:#080d13;border-radius:8px;color:#aab8c5;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:8px;word-break:break-all">0x7bE7280e31984d18f62218519985EC5DcCa751De</div>
+   </div>
+   <div class="liveActions">
+    <a class="link" href="https://www.tapeout.net/" target="_blank" rel="noopener">MINT ON TAPEOUT ↗</a>
+    <a class="link" href="https://www.oklink.com/x-layer/evm/address/0x7bE7280e31984d18f62218519985EC5DcCa751De" target="_blank" rel="noopener">OPEN EXPLORER ↗</a>
+   </div>
+   <div class="liveNote"><strong>How it works:</strong> the page watches the X Layer ERC-1155 transistor contract for mint events (transfers from the zero address), loads recent on-chain history, and then keeps a WebSocket subscription alive for new events. If WebSocket is unavailable, it falls back to HTTP polling.</div>
+  </aside>
+ </div>
+</section>
+
 <section class="section">
- <div class="sectionHead"><div class="sectionTitle"><span class="num">04</span> On-chain proof</div><div class="hint">Public deployment references</div></div>
+ <div class="sectionHead"><div class="sectionTitle"><span class="num">05</span> On-chain proof</div><div class="hint">Public deployment references</div></div>
  <div class="proof">
   <div class="proofText"><div class="proofTitle">Verify the deployment.</div><p>Every critical project reference is exposed for independent inspection. No wallet signing or private credentials are required by this demo.</p><div class="links"><a class="link" href="https://www.oklink.com/x-layer/evm/address/0xa5fc69Ca2D3d462CCa204D894D85ac8071c4F0f0" target="_blank" rel="noopener">PROCESSOR ↗</a><a class="link" href="https://www.oklink.com/x-layer/evm/address/0x7bE7280e31984d18f62218519985EC5DcCa751De" target="_blank" rel="noopener">TRANSISTORS ↗</a><a class="link" href="https://www.tapeout.net/" target="_blank" rel="noopener">TAPEOUT ↗</a><a class="link" href="https://www.okx.com/xlayer" target="_blank" rel="noopener">X LAYER ↗</a></div></div>
   <div class="addresses"><div class="addrLabel">PROCESSOR CONTRACT</div><div class="addr">0xa5fc69Ca2D3d462CCa204D894D85ac8071c4F0f0</div><div class="addrLabel" style="margin-top:13px">TRANSISTOR CONTRACT</div><div class="addr">0x7bE7280e31984d18f62218519985EC5DcCa751De</div></div>
@@ -123,7 +178,7 @@ a{text-decoration:none;color:inherit}button{font:inherit}.skip{position:absolute
 </section>
 
 <section class="section">
- <div class="sectionHead"><div class="sectionTitle"><span class="num">05</span> Verification matrix</div><div class="hint">Complete 2-of-3 state space</div></div>
+ <div class="sectionHead"><div class="sectionTitle"><span class="num">06</span> Verification matrix</div><div class="hint">Complete 2-of-3 state space</div></div>
  <div class="tableWrap"><table class="truth"><thead><tr><th>Risk</th><th>Liquidity</th><th>Market</th><th>Expected OUT</th><th>State</th></tr></thead><tbody id="truthTable"></tbody></table></div>
  <div class="footer"><span>Deterministic client-side verification · no API keys required</span><span>TAPEOUT CIRCUIT <code>3.2.268</code></span></div>
 </section>
