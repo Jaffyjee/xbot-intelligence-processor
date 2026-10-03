@@ -30,7 +30,7 @@ The project is documented against the required participation conditions:
 |---|---|
 | Processor contract | `0xa5fc69Ca2D3d462CCa204D894D85ac8071c4F0f0` |
 | Deployment wallet | `0x456b2071c82c9c7ae84e0f5202e3da3d15fe42cc` |
-| Product demo | [Launch the XBOT Processor Demo](../demo/) |
+| Product demo | [Launch the XBOT Processor Demo](demo/) |
 | Project description | This README + [architecture](docs/architecture.md) + [circuit](docs/circuit.md) documentation |
 | Network | X Layer |
 | TapeOut circuit | `3.2.268` |
