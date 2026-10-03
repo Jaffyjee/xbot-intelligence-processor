@@ -672,3 +672,58 @@ initLiveTracker();
 
   apply();
 })();
+
+/* -----------------------------
+   English / Chinese language toggle
+   ----------------------------- */
+(function initLanguage(){
+  const button=document.getElementById("languageToggle");
+  let language=localStorage.getItem("xbot-language")||"en";
+  const translations={
+    en:{},
+    zh:{
+      "XBOT INTELLIGENCE PROCESSOR":"XBOT 智能处理器",
+      "TAPEOUT CIRCUIT / ON-CHAIN LOGIC":"TAPEOUT 电路 / 链上逻辑",
+      "Intelligence, made deterministic.":"让智能变得确定。",
+      "A hardware-style consensus layer for XBOT. Three intelligence signals enter the processor; NAND logic deterministically decides whether two-of-three consensus is satisfied.":"为 XBOT 打造的硬件式共识层。三个智能信号进入处理器，由 NAND 逻辑确定性判断是否满足三选二共识。",
+      "Intelligence inputs":"智能输入",
+      "Binary signal control":"二进制信号控制",
+      "Processor execution":"处理器执行",
+      "Live NAND path":"实时 NAND 路径",
+      "TapeOut asset lifecycle":"TapeOut 资产生命周期",
+      "Primitive → reusable circuit":"基础元件 → 可复用电路",
+      "Mint XBOT Transistors":"铸造 XBOT 晶体管",
+      "Direct X Layer mint · wallet controlled":"直接在 X Layer 铸造 · 钱包控制",
+      "Live X Layer flow":"实时 X Layer 流程",
+      "ERC-1155 mint activity · no API key":"ERC-1155 铸造活动 · 无需 API 密钥",
+      "On-chain proof":"链上证明",
+      "Public deployment references":"公开部署信息",
+      "Connect with XBOT":"连接 XBOT",
+      "Official channels":"官方渠道",
+      "Verification matrix":"验证矩阵",
+      "Complete 2-of-3 state space":"完整三选二状态空间",
+      "RESET":"重置",
+      "CONNECT WALLET":"连接钱包",
+      "CONNECT WALLET TO MINT":"连接钱包以铸造",
+      "MINT XBOT TRANSISTORS":"铸造 XBOT 晶体管"
+    }
+  };
+  const original=new WeakMap();
+  function translate(){
+    document.querySelectorAll("body *").forEach(el=>{
+      if(el.children.length) return;
+      if(!original.has(el)) original.set(el,el.textContent);
+      const base=original.get(el).trim();
+      if(!base) return;
+      el.textContent=language==="zh" ? (translations.zh[base]||base) : base;
+    });
+    if(button) button.innerHTML=language==="zh"?"<span>中</span>":"<span>EN</span>";
+    document.documentElement.lang=language==="zh"?"zh-CN":"en";
+  }
+  button?.addEventListener("click",()=>{
+    language=language==="en"?"zh":"en";
+    localStorage.setItem("xbot-language",language);
+    translate();
+  });
+  translate();
+})();
