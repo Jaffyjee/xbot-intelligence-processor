@@ -53,7 +53,28 @@ a{text-decoration:none;color:inherit}button{font:inherit}.skip{position:absolute
 </section>
 
 <div class="body">
-<section class="section">
+<section class="section" aria-labelledby="requirements-title">
+ <div class="sectionHead"><div class="sectionTitle" id="requirements-title"><span class="num">00</span> Participation & submission</div><div class="hint">TapeOut requirement matrix</div></div>
+ <div style="padding:16px 19px">
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:9px">
+   <div class="life"><div class="lifeNo">01 / DEPLOYMENT</div><div class="lifeTitle">X Layer × TapeOut</div><div class="lifeText">XBOT processor deployed on <strong>X Layer</strong> through TapeOut.</div></div>
+   <div class="life"><div class="lifeNo">02 / ECONOMICS</div><div class="lifeTitle">Public supply + price</div><div class="lifeText"><strong>1,000,000,000</strong> transistor supply/cap · <strong>0.009 OKB</strong> per transistor.</div></div>
+   <div class="life"><div class="lifeNo">03 / CIRCUIT</div><div class="lifeTitle">TapeOut completed</div><div class="lifeText"><strong>Circuit 3.2.268</strong> is the demonstrated XBOT Consensus circuit.</div></div>
+   <div class="life"><div class="lifeNo">04 / USE CASE</div><div class="lifeTitle">Deterministic consensus</div><div class="lifeText">Risk + Liquidity + Market → NAND network → 2-of-3 XBOT Consensus.</div></div>
+  </div>
+  <div style="margin-top:10px;padding:13px;border:1px solid #1d2935;border-radius:12px;background:#080d13">
+   <div class="lifeNo">05 / SUBMISSION PACKAGE</div>
+   <div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:8px">
+    <a class="link" href="https://www.oklink.com/x-layer/evm/address/0xa5fc69Ca2D3d462CCa204D894D85ac8071c4F0f0" target="_blank" rel="noopener">PROCESSOR CONTRACT ↗</a>
+    <span class="link">WALLET <code style="margin-left:5px">0x456b…42cC</code></span>
+    <a class="link" href="#demo">PRODUCT DEMO ↓</a>
+    <a class="link" href="../README.md">PROJECT DESCRIPTION ↗</a>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section id="demo" class="section">
  <div class="sectionHead"><div class="sectionTitle"><span class="num">01</span> Intelligence inputs</div><div class="hint">Binary signal control</div></div>
  <div class="inputs">
   <div class="signal" data-card="0" role="group" aria-label="Risk input"><div class="sigTop"><span class="sigCode">IN0 / SIGNAL</span><span class="pill" data-state="0">LOW</span></div><div class="sigName">Risk</div><div class="switch"><button aria-pressed="true" data-input="0" data-value="0">0 · LOW</button><button aria-pressed="false" data-input="0" data-value="1">1 · HIGH</button></div></div>
