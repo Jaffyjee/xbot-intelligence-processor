@@ -166,6 +166,26 @@ No Node.js, package manager, API key, or build system is required.
 
 The demo is intentionally deterministic and runs entirely in the browser.
 
+## Live X Layer activity
+
+The product demo includes a live on-chain mint monitor for the XBOT ERC-1155 transistor contract.
+
+It connects directly to the public X Layer RPC/WebSocket infrastructure and:
+
+- loads recent ERC-1155 mint events from the transistor contract
+- identifies mints as transfers from the zero address
+- displays recipient, token ID, quantity, block and transaction hash
+- links each observed transaction to the X Layer explorer
+- subscribes to new contract logs over WebSocket
+- falls back to HTTP polling when WebSocket connectivity is unavailable
+- requires no API key, private key, wallet secret or backend credential
+
+X Layer documents its public RPC endpoint as `https://rpc.xlayer.tech` for chain ID 196 and its WebSocket endpoint as `wss://ws.xlayer.tech`. The demo uses those public endpoints directly in the browser.
+
+The live panel is intentionally read-only. Minting remains handled by TapeOut; the **Mint on TapeOut** button takes users to the protocol while the XBOT page independently observes the resulting on-chain mint events.
+
+> **Live-data note:** the browser loads a recent historical window and then tracks new confirmed mint events continuously. X Layer's public WebSocket documentation does not support `newPendingTransactions`, so the feed should be understood as confirmed on-chain activity rather than an unconfirmed mempool feed.
+
 ## Why this matters
 
 The broader XBOT architecture contains software agents and blockchain analysis components. This processor project explores a complementary idea: representing a small, auditable part of a decision pipeline as digital logic.
@@ -224,6 +244,7 @@ The browser demo intentionally has no wallet private keys, seed phrases, API sec
 - [x] XBOT Consensus logic designed
 - [x] TapeOut circuit `3.2.268` documented
 - [x] Browser truth-table demo
+- [x] Live X Layer ERC-1155 mint activity tracker
 - [x] XBOT brand asset added to the repository
 
 ### Next
