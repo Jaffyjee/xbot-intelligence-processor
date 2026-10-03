@@ -182,7 +182,7 @@ It connects directly to the public X Layer RPC/WebSocket infrastructure and:
 
 X Layer documents its public RPC endpoint as `https://rpc.xlayer.tech` for chain ID 196 and its WebSocket endpoint as `wss://ws.xlayer.tech`. The demo uses those public endpoints directly in the browser.
 
-The live panel is intentionally read-only. Minting remains handled by TapeOut; the **Mint on TapeOut** button takes users to the protocol while the XBOT page independently observes the resulting on-chain mint events.
+The demo now includes a wallet-controlled mint interface. Users can connect an EVM wallet, switch to X Layer, choose a quantity, review the estimated OKB cost, and submit the mint transaction directly to the XBOT transistor contract. The browser never handles private keys; the connected wallet signs the transaction. After confirmation, the interface shows a congratulations confirmation with the transaction link.
 
 > **Live-data note:** the browser loads a recent historical window and then tracks new confirmed mint events continuously. X Layer's public WebSocket documentation does not support `newPendingTransactions`, so the feed should be understood as confirmed on-chain activity rather than an unconfirmed mempool feed.
 
@@ -274,3 +274,19 @@ XBOT Intelligence Processor is an experimental software and digital-logic projec
 - [XBOT Intelligence Processor on GitHub](https://github.com/Jaffyjee/xbot-intelligence-processor)
 - [TapeOut](https://www.tapeout.net/)
 - [X Layer](https://www.okx.com/xlayer)
+
+
+## Direct mint interface
+
+The website provides a judge-facing, wallet-controlled mint flow for XBOT transistors:
+
+- Connect an EVM wallet from the browser.
+- Switch to X Layer (chain ID 196) when required.
+- Enter the desired transistor quantity.
+- Review the 0.009 OKB base price per transistor and estimated protocol fee.
+- The browser estimates the transaction before requesting a signature.
+- The connected wallet signs and broadcasts the transaction; no private key is handled by XBOT.
+- The UI waits for a confirmed receipt before declaring success.
+- Successful mints trigger a dedicated **Congratulations** confirmation with the confirmed transaction link.
+
+The direct mint call is intentionally fail-closed: if the deployed contract does not accept the expected `mint(uint256)` interface during gas estimation, no transaction is sent and the user is shown an error rather than being asked to sign an unverified transaction.
