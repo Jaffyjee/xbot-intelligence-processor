@@ -642,88 +642,225 @@ initLiveTracker();
 
 
 /* -----------------------------
-   Adaptive day/night theme
+   XBOT theme + bilingual interface
    ----------------------------- */
 (function initTheme() {
   const root = document.documentElement;
   const button = document.getElementById("themeToggle");
   const saved = localStorage.getItem("xbot-theme");
-  const modes = ["auto", "light", "dark"];
-  let mode = saved && modes.includes(saved) ? saved : "auto";
+  let mode = saved === "light" || saved === "dark" ? saved : "dark";
 
-  function apply() {
-    if (mode === "auto") root.removeAttribute("data-theme");
-    else root.setAttribute("data-theme", mode);
-
+  function applyTheme() {
+    root.setAttribute("data-theme", mode);
     if (button) {
-      const label = mode === "auto" ? "AUTO" : mode.toUpperCase();
-      const icon = mode === "light" ? "☀" : mode === "dark" ? "☾" : "◐";
-      button.innerHTML = '<span class="themeIcon">' + icon + '</span><span>' + label + '</span>';
-      button.setAttribute("aria-label", "Theme: " + label + ". Click to change.");
-      button.title = "Theme: " + label + " · click to switch";
+      const icon = mode === "light" ? "☀" : "☾";
+      button.innerHTML = '<span class="themeIcon">' + icon + '</span><span>' + mode.toUpperCase() + '</span>';
+      button.setAttribute("aria-label", "Theme: " + mode + ". Click to switch.");
+      button.title = "Theme: " + mode + " · click to switch";
     }
   }
 
   button?.addEventListener("click", () => {
-    mode = modes[(modes.indexOf(mode) + 1) % modes.length];
+    mode = mode === "dark" ? "light" : "dark";
     localStorage.setItem("xbot-theme", mode);
-    apply();
+    applyTheme();
   });
 
-  apply();
+  applyTheme();
 })();
 
 /* -----------------------------
-   English / Chinese language toggle
+   English / Simplified Chinese
    ----------------------------- */
-(function initLanguage(){
-  const button=document.getElementById("languageToggle");
-  let language=localStorage.getItem("xbot-language")||"en";
-  const translations={
-    en:{},
-    zh:{
-      "XBOT INTELLIGENCE PROCESSOR":"XBOT 智能处理器",
-      "TAPEOUT CIRCUIT / ON-CHAIN LOGIC":"TAPEOUT 电路 / 链上逻辑",
-      "Intelligence, made deterministic.":"让智能变得确定。",
-      "A hardware-style consensus layer for XBOT. Three intelligence signals enter the processor; NAND logic deterministically decides whether two-of-three consensus is satisfied.":"为 XBOT 打造的硬件式共识层。三个智能信号进入处理器，由 NAND 逻辑确定性判断是否满足三选二共识。",
-      "Intelligence inputs":"智能输入",
-      "Binary signal control":"二进制信号控制",
-      "Processor execution":"处理器执行",
-      "Live NAND path":"实时 NAND 路径",
-      "TapeOut asset lifecycle":"TapeOut 资产生命周期",
-      "Primitive → reusable circuit":"基础元件 → 可复用电路",
-      "Mint XBOT Transistors":"铸造 XBOT 晶体管",
-      "Direct X Layer mint · wallet controlled":"直接在 X Layer 铸造 · 钱包控制",
-      "Live X Layer flow":"实时 X Layer 流程",
-      "ERC-1155 mint activity · no API key":"ERC-1155 铸造活动 · 无需 API 密钥",
-      "On-chain proof":"链上证明",
-      "Public deployment references":"公开部署信息",
-      "Connect with XBOT":"连接 XBOT",
-      "Official channels":"官方渠道",
-      "Verification matrix":"验证矩阵",
-      "Complete 2-of-3 state space":"完整三选二状态空间",
-      "RESET":"重置",
-      "CONNECT WALLET":"连接钱包",
-      "CONNECT WALLET TO MINT":"连接钱包以铸造",
-      "MINT XBOT TRANSISTORS":"铸造 XBOT 晶体管"
-    }
+(function initLanguage() {
+  const group = document.getElementById("languageToggle");
+  if (!group) return;
+
+  let language = localStorage.getItem("xbot-language") === "zh" ? "zh" : "en";
+
+  const zh = {
+    "XBOT INTELLIGENCE PROCESSOR":"XBOT 智能处理器",
+    "TAPEOUT CIRCUIT / ON-CHAIN LOGIC":"TAPEOUT 电路 / 链上逻辑",
+    "Intelligence,":"智能，",
+    "made deterministic.":"变得确定。",
+    "Intelligence, made deterministic.":"让智能变得确定。",
+    "A hardware-style consensus layer for XBOT. Three intelligence signals enter the processor; NAND logic deterministically decides whether two-of-three consensus is satisfied.":"为 XBOT 打造的硬件式共识层。三个智能信号进入处理器，由 NAND 逻辑确定性判断是否满足三选二共识。",
+    "CIRCUIT":"电路",
+    "NETWORK":"网络",
+    "PRIMITIVE":"基础逻辑",
+    "FUNCTION":"功能",
+    "TRANSISTOR SUPPLY":"晶体管供应量",
+    "UNIT MINT PRICE":"单个铸造价格",
+    "PROCESSOR":"处理器",
+    "CIRCUIT STATUS":"电路状态",
+    "disclosed at deployment":"部署时公开披露",
+    "excluding protocol fee":"不含协议费用",
+    "DEPLOYED":"已部署",
+    "X Layer · TapeOut":"X Layer · TapeOut",
+    "TAPED OUT":"已完成 TapeOut",
+    "reference 3.2.268":"参考编号 3.2.268",
+    "Participation & submission":"参与与提交",
+    "TapeOut requirement matrix":"TapeOut 要求矩阵",
+    "X Layer × TapeOut":"X Layer × TapeOut",
+    "Public supply + price":"公开供应量与价格",
+    "TapeOut completed":"TapeOut 已完成",
+    "Deterministic consensus":"确定性共识",
+    "XBOT processor deployed on X Layer through TapeOut.":"XBOT 处理器已通过 TapeOut 部署在 X Layer。",
+    "transistor supply/cap":"晶体管供应量/上限",
+    "per transistor":"每个晶体管",
+    "is the demonstrated XBOT Consensus circuit.":"是本项目展示的 XBOT 共识电路。",
+    "Risk + Liquidity + Market → NAND network → 2-of-3 XBOT Consensus.":"风险 + 流动性 + 市场 → NAND 网络 → 三选二 XBOT 共识。",
+    "Submission package":"提交材料",
+    "Processor contract":"处理器合约",
+    "Deployment wallet":"部署钱包",
+    "Product demo":"产品演示",
+    "Project description":"项目说明",
+    "TapeOut circuit":"TapeOut 电路",
+    "Network":"网络",
+    "Intelligence inputs":"智能输入",
+    "Binary signal control":"二进制信号控制",
+    "Risk":"风险",
+    "Liquidity":"流动性",
+    "Market":"市场",
+    "LOW":"低",
+    "HIGH":"高",
+    "Processor execution":"处理器执行",
+    "Live NAND path":"实时 NAND 路径",
+    "XBOT Consensus":"XBOT 共识",
+    "ACTIVE SIGNALS":"活跃信号",
+    "DECISION":"决策",
+    "2 / 3 HIGH → CONSENSUS":"2 / 3 高 → 达成共识",
+    "Run 8-case verification":"运行 8 种状态验证",
+    "Reset":"重置",
+    "RESET":"重置",
+    "TapeOut asset lifecycle":"TapeOut 资产生命周期",
+    "Primitive → reusable circuit":"基础元件 → 可复用电路",
+    "Mint":"铸造",
+    "Transistor asset":"晶体管资产",
+    "Design":"设计",
+    "Logic composition":"逻辑组合",
+    "Tape Out":"Tape Out",
+    "Burn":"销毁",
+    "Result":"结果",
+    "Circuit NFT":"电路 NFT",
+    "Mint XBOT Transistors":"铸造 XBOT 晶体管",
+    "Direct X Layer mint · wallet controlled":"直接在 X Layer 铸造 · 钱包控制",
+    "Connect wallet":"连接钱包",
+    "CONNECT WALLET":"连接钱包",
+    "Quantity":"数量",
+    "Estimated total":"预计总计",
+    "Protocol fee":"协议费用",
+    "MINT XBOT TRANSISTORS":"铸造 XBOT 晶体管",
+    "CONNECT WALLET TO MINT":"连接钱包以铸造",
+    "Live X Layer flow":"实时 X Layer 流程",
+    "ERC-1155 mint activity · no API key":"ERC-1155 铸造活动 · 无需 API 密钥",
+    "LIVE · X LAYER CONNECTED":"实时 · X LAYER 已连接",
+    "LIVE · X LAYER WEBSOCKET":"实时 · X LAYER WebSocket",
+    "SYNCING X LAYER":"正在同步 X LAYER",
+    "RPC RETRYING":"RPC 重试中",
+    "RPC RETRYING":"RPC 重试中",
+    "On-chain proof":"链上证明",
+    "Public deployment references":"公开部署信息",
+    "Connect with XBOT":"连接 XBOT",
+    "Official channels":"官方渠道",
+    "Verification matrix":"验证矩阵",
+    "Complete 2-of-3 state space":"完整三选二状态空间",
+    "CURRENT":"当前",
+    "ASSERT":"通过",
+    "REJECT":"拒绝",
+    "LOW / LOW / LOW":"低 / 低 / 低",
+    "HIGH / HIGH / HIGH":"高 / 高 / 高",
+    "Experimental digital-logic project.":"实验性数字逻辑项目。",
+    "not financial advice":"非金融建议",
+    "View confirmed transaction ↗":"查看已确认交易 ↗",
+    "Mint confirmed successfully on X Layer.":"已在 X Layer 成功确认铸造。",
+    "Transaction submitted. Waiting for on-chain confirmation…":"交易已提交，等待链上确认…",
+    "Transaction cancelled in wallet.":"交易已在钱包中取消。",
+    "Mint failed. No completed purchase was recorded.":"铸造失败，未记录完成的购买。",
+    "Ready. Confirm the X Layer transaction in your wallet…":"准备就绪。请在钱包中确认 X Layer 交易…",
+    "No transistor mint events were found in the loaded history yet. Keep this page open and new mints will appear automatically.":"当前加载的历史记录中尚未发现晶体管铸造事件。保持页面打开，新铸造会自动显示。",
+    "XBOT Transistor Mint · Token #":"XBOT 晶体管铸造 · 代币 #",
+    "just now":"刚刚",
+    "time unavailable":"时间不可用",
+    "LIVE":"实时",
+    "TO ":"发送至 ",
+    "BLOCK ":"区块 ",
+    "TX ":"交易 "
   };
-  const original=new WeakMap();
-  function translate(){
-    document.querySelectorAll("body *").forEach(el=>{
-      if(el.children.length) return;
-      if(!original.has(el)) original.set(el,el.textContent);
-      const base=original.get(el).trim();
-      if(!base) return;
-      el.textContent=language==="zh" ? (translations.zh[base]||base) : base;
-    });
-    if(button) button.innerHTML=language==="zh"?"<span>中</span>":"<span>EN</span>";
-    document.documentElement.lang=language==="zh"?"zh-CN":"en";
+
+  const originalText = new WeakMap();
+
+  function translateText(text) {
+    if (!text) return text;
+    const clean = text.trim();
+    if (!clean) return text;
+    if (language === "en") return originalTextValue(clean, text);
+    if (zh[clean]) return text.replace(clean, zh[clean]);
+
+    let translated = clean;
+    Object.keys(zh)
+      .filter(key => key.length > 3 && !key.includes(" · "))
+      .sort((a,b) => b.length - a.length)
+      .forEach(key => {
+        translated = translated.split(key).join(zh[key]);
+      });
+    return text.replace(clean, translated);
   }
-  button?.addEventListener("click",()=>{
-    language=language==="en"?"zh":"en";
-    localStorage.setItem("xbot-language",language);
-    translate();
+
+  function originalTextValue(clean, fallback) {
+    return fallback;
+  }
+
+  function applyLanguage() {
+    document.documentElement.lang = language === "zh" ? "zh-CN" : "en";
+
+    document.querySelectorAll("body *").forEach(el => {
+      if (el.closest("#languageToggle")) return;
+      if (el.children.length) return;
+      if (!originalText.has(el)) originalText.set(el, el.textContent);
+      const source = originalText.get(el);
+      if (language === "zh") el.textContent = translateText(source);
+      else el.textContent = source;
+    });
+
+    group.querySelectorAll("[data-language]").forEach(btn => {
+      const active = btn.dataset.language === language;
+      btn.classList.toggle("active", active);
+      btn.setAttribute("aria-pressed", String(active));
+    });
+
+    const title = language === "zh" ? "切换语言" : "Change language";
+    group.setAttribute("aria-label", title);
+  }
+
+  group.querySelectorAll("[data-language]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      language = btn.dataset.language;
+      localStorage.setItem("xbot-language", language);
+      applyLanguage();
+    });
   });
-  translate();
+
+  /* Translate dynamic text added later by the live feed / wallet UI. */
+  const observer = new MutationObserver(mutations => {
+    if (language !== "zh") return;
+    for (const mutation of mutations) {
+      for (const node of mutation.addedNodes) {
+        if (node.nodeType !== 1) continue;
+        node.querySelectorAll("*").forEach(el => {
+          if (el.closest("#languageToggle")) return;
+          if (el.children.length) return;
+          if (!originalText.has(el)) originalText.set(el, el.textContent);
+          el.textContent = translateText(originalText.get(el));
+        });
+        if (!node.children?.length && node.textContent && !node.closest("#languageToggle")) {
+          if (!originalText.has(node)) originalText.set(node, node.textContent);
+          node.textContent = translateText(originalText.get(node));
+        }
+      }
+    }
+  });
+  observer.observe(document.body, { childList: true, subtree: true });
+
+  applyLanguage();
 })();
