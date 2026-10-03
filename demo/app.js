@@ -639,3 +639,36 @@ document.getElementById("refreshLive")?.addEventListener("click", loadRecentMint
 
 render();
 initLiveTracker();
+
+
+/* -----------------------------
+   Adaptive day/night theme
+   ----------------------------- */
+(function initTheme() {
+  const root = document.documentElement;
+  const button = document.getElementById("themeToggle");
+  const saved = localStorage.getItem("xbot-theme");
+  const modes = ["auto", "light", "dark"];
+  let mode = saved && modes.includes(saved) ? saved : "auto";
+
+  function apply() {
+    if (mode === "auto") root.removeAttribute("data-theme");
+    else root.setAttribute("data-theme", mode);
+
+    if (button) {
+      const label = mode === "auto" ? "AUTO" : mode.toUpperCase();
+      const icon = mode === "light" ? "☀" : mode === "dark" ? "☾" : "◐";
+      button.innerHTML = '<span class="themeIcon">' + icon + '</span><span>' + label + '</span>';
+      button.setAttribute("aria-label", "Theme: " + label + ". Click to change.");
+      button.title = "Theme: " + label + " · click to switch";
+    }
+  }
+
+  button?.addEventListener("click", () => {
+    mode = modes[(modes.indexOf(mode) + 1) % modes.length];
+    localStorage.setItem("xbot-theme", mode);
+    apply();
+  });
+
+  apply();
+})();
