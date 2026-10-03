@@ -3,64 +3,110 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>XBOT Consensus Demo</title>
-  <meta name="description" content="Interactive XBOT 2-of-3 consensus circuit demonstration.">
+  <meta name="theme-color" content="#07090d">
+  <title>XBOT · Intelligence Processor</title>
+  <meta name="description" content="Professional interactive demonstration of the XBOT 2-of-3 consensus circuit taped out on X Layer.">
   <style>
-    :root { color-scheme: dark; font-family: Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
-    body { margin:0; min-height:100vh; background:#080b12; color:#f4f7fb; }
-    main { width:min(980px,calc(100% - 32px)); margin:0 auto; padding:48px 0; }
-    .hero { padding:28px; border:1px solid #202838; border-radius:20px; background:#0e131d; }
-    h1 { margin:0 0 8px; font-size:clamp(32px,6vw,56px); }
-    .muted { color:#9ca8b8; }
-    .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin:24px 0; }
-    .input { padding:20px; border:1px solid #273244; border-radius:16px; background:#111824; }
-    .input h2 { margin:0 0 14px; font-size:16px; }
-    button { border:1px solid #344156; border-radius:10px; background:#182131; color:#fff; padding:10px 16px; cursor:pointer; font-weight:700; }
-    button.active { background:#fff; color:#080b12; }
-    .output { text-align:center; padding:28px; border:1px solid #273244; border-radius:18px; background:#0b1018; }
-    .value { font-size:64px; font-weight:900; margin:4px 0; }
-    .on { color:#69f0ae; } .off { color:#ff7b86; }
-    .actions { display:flex; gap:10px; flex-wrap:wrap; margin:18px 0; }
-    table { width:100%; border-collapse:collapse; margin-top:22px; overflow:hidden; border-radius:14px; }
-    th,td { padding:11px; border-bottom:1px solid #202838; text-align:center; }
-    th { color:#9ca8b8; font-size:13px; }
-    tr.current { background:#172131; font-weight:800; }
-    code { color:#cdd7e5; }
-    @media(max-width:650px){ .grid{grid-template-columns:1fr;} }
+    :root{
+      --bg:#05070a;--panel:#0a0e14;--panel2:#0d131b;--line:#1b2633;--text:#edf4fb;--muted:#7f8da0;
+      --green:#48f0a0;--cyan:#63d9ff;--red:#ff6678;--amber:#ffc857;--shadow:0 24px 80px rgba(0,0,0,.45);
+      font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+    *{box-sizing:border-box}html{scroll-behavior:smooth}
+    body{margin:0;min-height:100vh;background:radial-gradient(circle at 80% 0%,rgba(72,240,160,.08),transparent 32%),radial-gradient(circle at 15% 15%,rgba(99,217,255,.07),transparent 30%),var(--bg);color:var(--text)}
+    button{font:inherit}.wrap{width:min(1180px,calc(100% - 32px));margin:auto;padding:28px 0 64px}
+    .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px}
+    .brand{display:flex;align-items:center;gap:12px;font-weight:850;letter-spacing:.04em}.mark{width:34px;height:34px;border:1px solid #294053;border-radius:10px;display:grid;place-items:center;background:#0d151d;color:var(--green);font-size:14px}
+    .badge{display:inline-flex;align-items:center;gap:8px;padding:8px 11px;border:1px solid #1d3038;border-radius:999px;background:#09120f;color:#a8f8cf;font-size:12px;font-weight:750}.dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 14px var(--green)}
+    .hero{border:1px solid var(--line);border-radius:24px;background:linear-gradient(145deg,rgba(13,19,27,.96),rgba(7,10,14,.96));box-shadow:var(--shadow);overflow:hidden}
+    .herohead{padding:34px 34px 26px;border-bottom:1px solid var(--line);position:relative}.eyebrow{font-size:11px;letter-spacing:.16em;color:var(--cyan);font-weight:800}.hero h1{font-size:clamp(34px,6vw,64px);line-height:.98;margin:10px 0 14px;letter-spacing:-.045em}.hero p{max-width:720px;color:var(--muted);font-size:15px;line-height:1.65;margin:0}
+    .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}.chip{border:1px solid #202d3b;background:#0a1017;border-radius:10px;padding:8px 10px;color:#aebccc;font-size:12px}.chip b{color:#eef6fc}
+    .content{padding:24px}.section{border:1px solid var(--line);border-radius:18px;background:rgba(9,13,18,.82);margin-bottom:16px;overflow:hidden}.section:last-child{margin-bottom:0}
+    .sectionhead{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:18px 20px;border-bottom:1px solid var(--line)}.sectiontitle{font-size:14px;font-weight:800}.sectionhint{font-size:12px;color:var(--muted)}
+    .inputs{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:18px 20px}.signal{border:1px solid #1e2b39;border-radius:15px;background:#0b1118;padding:16px;transition:.2s}.signal.live{border-color:#245a47;box-shadow:inset 0 0 0 1px rgba(72,240,160,.06),0 0 30px rgba(72,240,160,.05)}
+    .signaltop{display:flex;align-items:center;justify-content:space-between}.siglabel{font-size:12px;color:#a7b5c5;font-weight:750}.signame{font-size:17px;font-weight:850;margin-top:7px}.statepill{font-size:11px;padding:5px 8px;border-radius:7px;background:#121a23;color:#8291a3}.live .statepill{color:#a9ffd0;background:#0b2118}
+    .switch{display:flex;gap:7px;margin-top:14px}.switch button{flex:1;border:1px solid #253343;background:#101822;color:#a8b5c4;border-radius:9px;padding:9px;cursor:pointer;font-weight:800}.switch button:hover{border-color:#38506a}.switch button.active{background:#eafdf5;color:#07110c;border-color:#eafdf5}
+    .processor{display:grid;grid-template-columns:1fr 280px;gap:16px;padding:18px 20px}.diagram{position:relative;min-height:320px;border:1px solid #172330;border-radius:15px;background:linear-gradient(180deg,#080d13,#070a0e);overflow:hidden}
+    .gridbg{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:28px 28px}
+    .nodes{position:absolute;inset:0}.node{position:absolute;width:92px;padding:10px 8px;text-align:center;border:1px solid #263544;border-radius:10px;background:#0d141c;font-size:11px;font-weight:800;z-index:2;transition:.2s}.node small{display:block;color:#68788a;font-weight:600;margin-top:3px}.node.active{border-color:#3a7d60;box-shadow:0 0 22px rgba(72,240,160,.11);color:#dffff0}.node.output{border-color:#385e6b}.n1{left:6%;top:18%}.n2{left:6%;top:61%}.n3{left:36%;top:40%}.n4{left:57%;top:22%}.n5{left:57%;top:63%}.n6{left:78%;top:40%}.wire{position:absolute;height:1px;background:#273746;transform-origin:left center;z-index:1}.wire.hot{background:linear-gradient(90deg,var(--green),var(--cyan));box-shadow:0 0 9px rgba(72,240,160,.45)}
+    .w1{left:15%;top:31%;width:22%;transform:rotate(20deg)}.w2{left:15%;top:69%;width:22%;transform:rotate(-20deg)}.w3{left:45%;top:48%;width:14%;transform:rotate(-50deg)}.w4{left:45%;top:48%;width:14%;transform:rotate(45deg)}.w5{left:66%;top:31%;width:15%;transform:rotate(28deg)}.w6{left:66%;top:69%;width:15%;transform:rotate(-28deg)}
+    .outpanel{border:1px solid #1e2e39;border-radius:15px;background:#091016;padding:20px;display:flex;flex-direction:column;justify-content:center;text-align:center}.outlabel{font-size:11px;letter-spacing:.12em;color:#7f93a5;font-weight:800}.outvalue{font-size:82px;line-height:1;font-weight:950;margin:10px 0}.outvalue.on{color:var(--green);text-shadow:0 0 35px rgba(72,240,160,.25)}.outvalue.off{color:#647283}.decision{font-size:13px;color:#aab8c7;line-height:1.5}.decision strong{color:#eaf3fa}.metric{display:flex;justify-content:space-between;border-top:1px solid #18232e;padding-top:12px;margin-top:16px;font-size:11px;color:#708092}.metric b{color:#b9c7d5}
+    .toolbar{display:flex;gap:9px;flex-wrap:wrap;padding:0 20px 18px}.btn{border:1px solid #263647;background:#111a24;color:#e8f0f6;border-radius:10px;padding:10px 13px;cursor:pointer;font-weight:800;font-size:12px}.btn:hover{border-color:#3d5369}.btn.primary{background:#eafdf5;color:#07110c;border-color:#eafdf5}.btn:disabled{opacity:.5;cursor:not-allowed}
+    .tablewrap{overflow:auto}.truth{width:100%;border-collapse:collapse;min-width:500px}.truth th,.truth td{padding:12px 16px;text-align:center;border-bottom:1px solid #17212c;font-size:12px}.truth th{color:#718094;font-size:10px;letter-spacing:.08em;text-transform:uppercase}.truth tr.current{background:rgba(72,240,160,.055)}.truth tr.current td{color:#e8fff4}.result1{color:var(--green);font-weight:900}.result0{color:#6d7b8b;font-weight:800}
+    .footerline{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:16px 20px;color:#647386;font-size:11px}.footerline code{color:#9aabbc}.pulse{animation:pulse .65s ease}@keyframes pulse{0%{transform:scale(.92);opacity:.4}60%{transform:scale(1.06);opacity:1}100%{transform:scale(1);opacity:1}}
+    @media(max-width:850px){.processor{grid-template-columns:1fr}.diagram{min-height:290px}.inputs{grid-template-columns:1fr}}
+    @media(max-width:560px){.wrap{width:min(100% - 18px,1180px);padding-top:12px}.herohead{padding:25px 20px 20px}.content{padding:12px}.processor{padding:12px}.inputs{padding:12px}.sectionhead{padding:15px}.hero h1{font-size:42px}.node{width:78px;font-size:10px}.n1{left:4%}.n2{left:4%}.n3{left:31%}.n4{left:55%}.n5{left:55%}.n6{left:77%}}
   </style>
 </head>
 <body>
-<main>
-  <section class="hero">
-    <p class="muted">XBOT INTELLIGENCE PROCESSOR</p>
-    <h1>2-of-3 Consensus</h1>
-    <p class="muted">Interactive simulation of the Risk + Liquidity + Market consensus primitive documented in this repository.</p>
+<div class="wrap">
+  <div class="topbar">
+    <div class="brand"><div class="mark">XB</div><span>XBOT / TAPEOUT</span></div>
+    <div class="badge"><span class="dot"></span> X LAYER · TEST</div>
+  </div>
 
-    <div class="grid">
-      <div class="input"><h2>IN0 · Risk</h2><button data-input="0" data-value="0">0</button> <button data-input="0" data-value="1">1</button></div>
-      <div class="input"><h2>IN1 · Liquidity</h2><button data-input="1" data-value="0">0</button> <button data-input="1" data-value="1">1</button></div>
-      <div class="input"><h2>IN2 · Market</h2><button data-input="2" data-value="0">0</button> <button data-input="2" data-value="1">1</button></div>
+  <main class="hero">
+    <header class="herohead">
+      <div class="eyebrow">ON-CHAIN INTELLIGENCE PROCESSOR</div>
+      <h1>Consensus, reduced to logic.</h1>
+      <p>Operate the XBOT 2-of-3 consensus primitive interactively. Risk, Liquidity and Market are evaluated as binary intelligence signals. The circuit asserts consensus when at least two signals are high.</p>
+      <div class="meta">
+        <div class="chip">CIRCUIT <b>3.2.268</b></div>
+        <div class="chip">NETWORK <b>X Layer</b></div>
+        <div class="chip">LOGIC <b>NAND</b></div>
+        <div class="chip">FUNCTION <b>2 / 3</b></div>
+      </div>
+    </header>
+
+    <div class="content">
+      <section class="section">
+        <div class="sectionhead"><div class="sectiontitle">01 · Intelligence Inputs</div><div class="sectionhint">Set each signal to LOW or HIGH</div></div>
+        <div class="inputs">
+          <div class="signal" data-card="0"><div class="signaltop"><div class="siglabel">IN0</div><div class="statepill" data-state="0">LOW</div></div><div class="signame">Risk</div><div class="switch"><button data-input="0" data-value="0">0 · LOW</button><button data-input="0" data-value="1">1 · HIGH</button></div></div>
+          <div class="signal" data-card="1"><div class="signaltop"><div class="siglabel">IN1</div><div class="statepill" data-state="1">LOW</div></div><div class="signame">Liquidity</div><div class="switch"><button data-input="1" data-value="0">0 · LOW</button><button data-input="1" data-value="1">1 · HIGH</button></div></div>
+          <div class="signal" data-card="2"><div class="signaltop"><div class="siglabel">IN2</div><div class="statepill" data-state="2">LOW</div></div><div class="signame">Market</div><div class="switch"><button data-input="2" data-value="0">0 · LOW</button><button data-input="2" data-value="1">1 · HIGH</button></div></div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="sectionhead"><div class="sectiontitle">02 · Processor Execution</div><div class="sectionhint">NAND-only evaluation path</div></div>
+        <div class="processor">
+          <div class="diagram" aria-label="XBOT NAND circuit visualization">
+            <div class="gridbg"></div>
+            <div class="nodes">
+              <div class="node n1" data-node="n1">N1 · NAND<small>Risk × Liquidity</small></div>
+              <div class="node n2" data-node="n2">N2 · NAND<small>Risk × Market</small></div>
+              <div class="node n3" data-node="n3">N3 · NAND<small>Liquidity × Market</small></div>
+              <div class="node n4" data-node="n4">N4 · NAND<small>N1 × N2</small></div>
+              <div class="node n5" data-node="n5">N5 · NAND<small>N4 × N4</small></div>
+              <div class="node n6 output" data-node="n6">OUT · NAND<small>N5 × N3</small></div>
+              <i class="wire w1" data-wire="w1"></i><i class="wire w2" data-wire="w2"></i><i class="wire w3" data-wire="w3"></i><i class="wire w4" data-wire="w4"></i><i class="wire w5" data-wire="w5"></i><i class="wire w6" data-wire="w6"></i>
+            </div>
+          </div>
+          <aside class="outpanel">
+            <div class="outlabel">OUT0 · XBOT CONSENSUS</div>
+            <div id="output" class="outvalue off">0</div>
+            <div id="status" class="decision">Consensus is <strong>not asserted</strong>.</div>
+            <div class="metric"><span>ACTIVE SIGNALS</span><b id="activeCount">0 / 3</b></div>
+            <div class="metric"><span>DECISION RULE</span><b>≥ 2 HIGH</b></div>
+          </aside>
+        </div>
+        <div class="toolbar">
+          <button id="runAll" class="btn primary">▶ Run 8-case verification</button>
+          <button id="reset" class="btn">Reset inputs</button>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="sectionhead"><div class="sectiontitle">03 · Verification Matrix</div><div class="sectionhint">All 8 possible input states</div></div>
+        <div class="tablewrap">
+          <table class="truth"><thead><tr><th>Risk</th><th>Liquidity</th><th>Market</th><th>Expected OUT</th><th>State</th></tr></thead><tbody id="truthTable"></tbody></table>
+        </div>
+        <div class="footerline"><span>Deterministic client-side verification · no API keys required</span><span>TapeOut reference <code>3.2.268</code></span></div>
+      </section>
     </div>
-
-    <div class="output">
-      <div class="muted">OUT0 · XBOT CONSENSUS</div>
-      <div id="output" class="value off">0</div>
-      <div id="status" class="muted">Less than two signals are active.</div>
-    </div>
-
-    <div class="actions">
-      <button id="runAll">Run all 8 cases</button>
-      <button id="reset">Reset</button>
-    </div>
-
-    <table>
-      <thead><tr><th>Risk</th><th>Liquidity</th><th>Market</th><th>Consensus</th></tr></thead>
-      <tbody id="truthTable"></tbody>
-    </table>
-
-    <p class="muted">Circuit reference: <code>3.2.268</code> · Network: <code>X Layer</code></p>
-  </section>
-</main>
+  </main>
+</div>
 <script src="./app.js"></script>
 </body>
 </html>
