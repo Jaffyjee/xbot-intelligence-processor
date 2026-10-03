@@ -98,7 +98,39 @@
       </section>
 
       <section class="section">
-        <div class="sectionhead"><div class="sectiontitle">03 · Verification Matrix</div><div class="sectionhint">All 8 possible input states</div></div>
+        <div class="sectionhead"><div class="sectiontitle">03 · TapeOut Asset Lifecycle</div><div class="sectionhint">From primitive token to circuit</div></div>
+        <div style="padding:20px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
+          <div class="signal"><div class="siglabel">01 · MINT</div><div class="signame">Transistor</div><p class="sectionhint">ERC-1155 primitive minted at the disclosed unit price.</p></div>
+          <div class="signal"><div class="siglabel">02 · DESIGN</div><div class="signame">Wire Logic</div><p class="sectionhint">NAND primitives are composed into a deterministic netlist.</p></div>
+          <div class="signal"><div class="siglabel">03 · TAPE OUT</div><div class="signame">Burn → Build</div><p class="sectionhint">The design consumes its transistor assets.</p></div>
+          <div class="signal"><div class="siglabel">04 · RESULT</div><div class="signame">Circuit NFT</div><p class="sectionhint">A finished circuit becomes a reusable black-box building block.</p></div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="sectionhead"><div class="sectiontitle">04 · Economic & Security Surface</div><div class="sectionhint">Transparent project parameters</div></div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:18px 20px">
+          <div class="signal"><div class="siglabel">SUPPLY CAP</div><div class="signame">1,000,000,000</div><p class="sectionhint">XBOT transistor units disclosed at deployment.</p></div>
+          <div class="signal"><div class="siglabel">UNIT PRICE</div><div class="signame">0.009 OKB</div><p class="sectionhint">Fixed disclosed mint price, excluding protocol fee.</p></div>
+          <div class="signal"><div class="siglabel">MAX GROSS MINT VALUE</div><div class="signame">9,000,000 OKB</div><p class="sectionhint">Simple cap × price calculation if the full supply were minted; not a revenue forecast.</p></div>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;padding:0 20px 20px">
+          <div class="chip">✓ Deterministic NAND evaluation</div><div class="chip">✓ No API keys in client</div><div class="chip">✓ Contract addresses disclosed</div><div class="chip">✓ No private-key operations</div><div class="chip">! Experimental · not audited</div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="sectionhead"><div class="sectiontitle">05 · On-Chain Proof Surface</div><div class="sectionhint">Open the deployed assets in an X Layer explorer</div></div>
+        <div style="padding:18px 20px;display:flex;flex-wrap:wrap;gap:10px">
+          <a class="btn" href="https://www.oklink.com/x-layer/evm/address/0xa5fc69Ca2D3d462CCa204D894D85ac8071c4F0f0" target="_blank" rel="noopener">Processor contract ↗</a>
+          <a class="btn" href="https://www.oklink.com/x-layer/evm/address/0x7bE7280e31984d18f62218519985EC5DcCa751De" target="_blank" rel="noopener">Transistor contract ↗</a>
+          <a class="btn" href="https://www.tapeout.net/" target="_blank" rel="noopener">TapeOut protocol ↗</a>
+          <a class="btn" href="https://www.okx.com/xlayer" target="_blank" rel="noopener">X Layer ↗</a>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="sectionhead"><div class="sectiontitle">06 · Verification Matrix</div><div class="sectionhint">All 8 possible input states</div></div>
         <div class="tablewrap">
           <table class="truth"><thead><tr><th>Risk</th><th>Liquidity</th><th>Market</th><th>Expected OUT</th><th>State</th></tr></thead><tbody id="truthTable"></tbody></table>
         </div>
