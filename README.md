@@ -12,6 +12,31 @@ XBOT Intelligence Processor is an experimental digital-logic processor inspired 
 
 The first demonstrated intelligence primitive is an **XBOT Consensus** circuit: three binary signals — Risk, Liquidity, and Market — are combined into a **2-of-3 consensus output**.
 
+## TapeOut participation requirements
+
+The project is documented against the required participation conditions:
+
+| Requirement | Project evidence |
+|---|---|
+| Processor deployed on X Layer through the TapeOut factory | **XBOT Intelligence Processor** is deployed on **X Layer** through TapeOut. Processor contract: `0xa5fc69Ca2D3d462CCa204D894D85ac8071c4F0f0` |
+| Transistor supply, unit price and any cap publicly disclosed at deployment | **1,000,000,000 transistor supply/cap** and **0.009 OKB per transistor** are publicly documented |
+| At least one circuit taped out before the window closes | Demonstrated circuit: **`3.2.268`** |
+| Clear use case | **XBOT Consensus** combines Risk, Liquidity and Market signals into a deterministic **2-of-3** logic primitive |
+| Submission materials | Processor contract, deployment wallet, product demo and project description are documented below |
+
+### Submission details
+
+| Field | Public reference |
+|---|---|
+| Processor contract | `0xa5fc69Ca2D3d462CCa204D894D85ac8071c4F0f0` |
+| Deployment wallet | `0x456b2071c82c9c7ae84e0f5202e3da3d15fe42cc` |
+| Product demo | [Launch the XBOT Processor Demo](../demo/) |
+| Project description | This README + [architecture](docs/architecture.md) + [circuit](docs/circuit.md) documentation |
+| Network | X Layer |
+| TapeOut circuit | `3.2.268` |
+
+> **Verification note:** Contract addresses, circuit references and deployment metadata should be independently checked against the live TapeOut/X Layer records. The repository does not claim an external audit or replace protocol-level verification.
+
 ## Project at a glance
 
 | Property | Value |
