@@ -144,7 +144,10 @@ async function connectWallet() {
     document.getElementById("walletAddress").textContent = shortWallet(walletAccount) + " · " + weiToOkb(BigInt(balance)) + " OKB";
     document.getElementById("connectWallet").textContent = "CONNECTED";
     document.getElementById("mintButton").textContent = "MINT XBOT TRANSISTORS";
-    setMintStatus("Wallet connected. Review the quantity and total, then confirm the transaction in your wallet.", "");
+    window.dispatchEvent(new CustomEvent("xbotwalletconnected", {
+      detail: { address: walletAccount, chainId: XBOT_CHAIN_ID }
+    }));
+    setMintStatus("Wallet connected. Signing is ready. Every transaction or signature will require approval in your wallet.", "");
     updateMintQuote();
   } catch (error) {
     setMintStatus(error?.message || "Wallet connection cancelled.", "error");
@@ -163,6 +166,74 @@ async function estimateMintData(quantity, valueHex) {
     throw new Error("The deployed XBOT transistor contract did not accept the expected mint(quantity) call. No transaction was sent.");
   }
 }
+
+/**
+ * Central wallet-signing callback.
+ *
+ * Every signing request is explicitly forwarded to the connected wallet.
+ * The wallet remains the final authority: this page never receives a
+ * private key and never auto-approves a signature.
+ *
+ * Supported request types:
+ *   { type: "transaction", tx: {...} } -> eth_sendTransaction
+ *   { type: "personal", message: "..." } -> personal_sign
+ *   { type: "typedData", typedData: "..." } -> eth_signTypedData_v4
+ *
+ * A plain transaction object is also accepted for convenience.
+ */
+async function requestWalletSignature(request) {
+  if (!walletProvider || !walletAccount) {
+    throw new Error("Connect your wallet before requesting a signature.");
+  }
+
+  const normalized = request?.type ? request : { type: "transaction", tx: request };
+
+  if (normalized.type === "transaction") {
+    const tx = { ...(normalized.tx || {}) };
+    tx.from = tx.from || walletAccount;
+
+    if (!tx.to && !tx.data) {
+      throw new Error("A transaction requires a destination or calldata.");
+    }
+
+    // This is the wallet callback: the connected wallet displays the
+    // transaction and asks the user to approve/reject it.
+    return walletProvider.request({
+      method: "eth_sendTransaction",
+      params: [tx]
+    });
+  }
+
+  if (normalized.type === "personal") {
+    if (!normalized.message) throw new Error("A message is required to sign.");
+    return walletProvider.request({
+      method: "personal_sign",
+      params: [normalized.message, walletAccount]
+    });
+  }
+
+  if (normalized.type === "typedData") {
+    if (!normalized.typedData) throw new Error("Typed data is required to sign.");
+    return walletProvider.request({
+      method: "eth_signTypedData_v4",
+      params: [walletAccount, typeof normalized.typedData === "string"
+        ? normalized.typedData
+        : JSON.stringify(normalized.typedData)]
+    });
+  }
+
+  throw new Error("Unsupported wallet signing request type.");
+}
+
+// Public callback API for future XBOT transaction flows.
+// Nothing is signed until a caller explicitly invokes one of these methods.
+window.XBOTWallet = Object.freeze({
+  getAddress: () => walletAccount,
+  isConnected: () => Boolean(walletProvider && walletAccount),
+  signTransaction: tx => requestWalletSignature({ type: "transaction", tx }),
+  signMessage: message => requestWalletSignature({ type: "personal", message }),
+  signTypedData: typedData => requestWalletSignature({ type: "typedData", typedData })
+});
 
 async function mintXBOT() {
   if (!walletProvider || !walletAccount) { await connectWallet(); return; }
@@ -184,9 +255,11 @@ async function mintXBOT() {
     setMintStatus("Checking the live contract before asking your wallet to sign…");
     const candidate = await estimateMintData(quantity, valueHex);
     setMintStatus("Ready. Confirm the X Layer transaction in your wallet…");
-    const txHash = await walletProvider.request({
-      method: "eth_sendTransaction",
-      params: [{ from: walletAccount, to: XBOT_CONTRACT, value: valueHex, data: candidate.data }]
+    const txHash = await requestWalletSignature({
+      from: walletAccount,
+      to: XBOT_CONTRACT,
+      value: valueHex,
+      data: candidate.data
     });
     setMintStatus("Transaction submitted. Waiting for on-chain confirmation…");
     await waitForReceipt(txHash);
