@@ -156,6 +156,33 @@ XBOT AI / Blockchain Intelligence
 
 The circuit does not claim to replace the XBOT AI backend. It demonstrates how selected binary signals can be combined through deterministic logic.
 
+## Hackathon integration map
+
+The demo is designed to make the project's technical surface easy to inspect:
+
+| Evaluation area | What reviewers can inspect |
+|---|---|
+| Application innovation | XBOT intelligence signals reduced to a deterministic 2-of-3 hardware-style consensus primitive |
+| TapeOut ecosystem integration | NAND transistor primitives, wired netlist, taped-out circuit reference `3.2.268`, and circuit-oriented asset lifecycle |
+| Product completeness / UX | Interactive signal controls, live NAND path visualization, eight-state verification, responsive interface, and proof links |
+| Asset issuance design | 1B disclosed transistor supply, 0.009 OKB unit price, ERC-1155 transistor asset, and circuit creation through TapeOut |
+| X Layer integration | X Layer deployment network plus directly inspectable processor and transistor contract addresses |
+| User growth potential | A reusable primitive that can be extended into additional XBOT circuits and used as a black-box building block |
+| Contract security / economics | Deterministic client verification, explicit contract addresses, no client-side secrets, disclosed supply/price, and an explicit note that the project is experimental and unaudited |
+
+### Important economic note
+
+At the disclosed fixed price, a simple theoretical upper bound of full-supply gross mint consideration is:
+
+`1,000,000,000 × 0.009 OKB = 9,000,000 OKB`
+
+This is a mathematical cap based on the published supply and unit price, **not a revenue projection** and does not account for protocol fees or actual mint demand.
+
+### Security posture
+
+The browser demo intentionally has no wallet private keys, seed phrases, API secrets, or signing credentials. Its logic is deterministic and can be checked against the eight-state truth table. The repository does not claim a third-party security audit; reviewers should inspect the deployed contracts and TapeOut protocol behavior directly.
+
+
 ## Development roadmap
 
 ### Completed
