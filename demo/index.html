@@ -79,6 +79,43 @@ a{text-decoration:none;color:inherit}button{font:inherit}.skip{position:absolute
 .modal{position:fixed;inset:0;z-index:2000;display:none;place-items:center;padding:20px;background:rgba(2,5,8,.78);backdrop-filter:blur(12px)}.modal.open{display:grid}.modalCard{width:min(440px,100%);border:1px solid #294238;border-radius:20px;background:linear-gradient(145deg,#0e1715,#080d11);box-shadow:0 40px 120px rgba(0,0,0,.6);padding:28px;text-align:center}.modalIcon{width:62px;height:62px;margin:0 auto;border-radius:18px;display:grid;place-items:center;background:#0b2519;border:1px solid #31664c;color:var(--green);font-size:27px;box-shadow:0 0 45px rgba(82,242,163,.14)}.modalEyebrow{margin-top:17px;color:var(--green);font-size:9px;letter-spacing:.16em;font-weight:950}.modalTitle{margin-top:8px;font-size:29px;font-weight:950;letter-spacing:-.04em}.modalText{margin-top:8px;color:#81909f;font-size:10px;line-height:1.7}.modalAmount{margin:17px 0;padding:13px;border:1px solid #20342b;border-radius:10px;background:#09130f;color:#dfffee;font-size:12px;font-weight:900}.modalTx{display:block;margin-top:12px;color:#63d8ff;font-size:9px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;word-break:break-all}.modalClose{width:100%;margin-top:18px;border:1px solid #2a3a49;background:#111a23;color:#dbe6ed;border-radius:10px;padding:11px;cursor:pointer;font-size:9px;font-weight:950}
 @media(max-width:900px){.mintGrid{grid-template-columns:1fr}}
 @media(max-width:650px){.mintGrid{padding:12px}.costBox{grid-template-columns:1fr}.mintTitle{font-size:22px}}
+
+/* XBOT // high-tech interface layer */
+html{background:#030508}
+body{background:radial-gradient(900px 520px at 50% -12%,rgba(99,216,255,.10),transparent 62%),radial-gradient(700px 500px at 100% 30%,rgba(82,242,163,.07),transparent 65%),#030508}
+body:before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.24;background-image:linear-gradient(rgba(99,216,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(99,216,255,.035) 1px,transparent 1px);background-size:48px 48px;mask-image:linear-gradient(to bottom,#000,transparent 88%)}
+body:after{content:"";position:fixed;inset:0;z-index:9999;pointer-events:none;background:repeating-linear-gradient(to bottom,transparent 0,transparent 3px,rgba(255,255,255,.008) 4px);opacity:.25}
+.nav{position:relative}
+.nav:after{content:"SYSTEM ONLINE // XBOT CORE";position:absolute;left:50%;transform:translateX(-50%);font:800 8px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.18em;color:#405263;top:65px;white-space:nowrap}
+.hero{background:linear-gradient(145deg,rgba(10,16,23,.98),rgba(4,8,12,.99));border-color:#1e2d3b;box-shadow:0 30px 100px rgba(0,0,0,.55),inset 0 1px rgba(255,255,255,.025)}
+.herohead{min-height:390px;display:flex;flex-direction:column;justify-content:center;background:radial-gradient(circle at 78% 45%,rgba(99,216,255,.08),transparent 24%),radial-gradient(circle at 88% 70%,rgba(82,242,163,.055),transparent 20%)}
+.herohead:before{content:"";position:absolute;right:7%;top:15%;width:250px;height:250px;border:1px solid rgba(99,216,255,.10);border-radius:50%;box-shadow:0 0 0 24px rgba(99,216,255,.018),0 0 0 48px rgba(99,216,255,.012);animation:orbitPulse 5s ease-in-out infinite}
+.herohead:after{content:"XBOT\A INTELLIGENCE\A PROCESSOR";white-space:pre;position:absolute;right:10%;top:27%;font:900 9px/1.8 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.22em;color:#405465;text-align:center;opacity:.7}
+.eyebrow{position:relative;z-index:2;text-shadow:0 0 18px rgba(99,216,255,.25)}
+.hero h1{position:relative;z-index:2;text-shadow:0 0 45px rgba(99,216,255,.07)}
+.hero .lead,.heroMeta{position:relative;z-index:2}
+.tag{box-shadow:inset 0 1px rgba(255,255,255,.025)}
+.stat{position:relative;background:linear-gradient(180deg,#080d13,#060a0f)}
+.stat:after{content:"";position:absolute;left:22px;right:22px;bottom:0;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);opacity:.12}
+.section{border-color:#182633;box-shadow:0 18px 60px rgba(0,0,0,.12),inset 0 1px rgba(255,255,255,.015)}
+.sectionHead{background:linear-gradient(90deg,rgba(99,216,255,.018),transparent 45%)}
+.sectionTitle:before{content:"";width:4px;height:4px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan)}
+.signal:hover,.mintCard:hover,.life:hover,.chainMetric:hover,.socialCard:hover{border-color:#2c4658}
+.canvas{box-shadow:inset 0 0 70px rgba(99,216,255,.025),0 0 35px rgba(0,0,0,.25)}
+.canvas:after{content:"";position:absolute;left:0;right:0;height:1px;top:-1px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);opacity:.35;animation:scan 3.5s linear infinite;z-index:4}
+.node{box-shadow:inset 0 1px rgba(255,255,255,.03)}
+.node.active{box-shadow:0 0 24px rgba(82,242,163,.12),inset 0 0 18px rgba(82,242,163,.025)}
+.outputPanel{box-shadow:inset 0 0 50px rgba(99,216,255,.025)}
+.out.on{text-shadow:0 0 15px rgba(82,242,163,.45),0 0 55px rgba(82,242,163,.18)}
+.mintButton{box-shadow:0 0 0 rgba(82,242,163,0);transition:.2s}
+.mintButton:hover{box-shadow:0 0 28px rgba(82,242,163,.18),0 12px 30px rgba(82,242,163,.08);transform:translateY(-1px)}
+.liveFeed,.canvas,.mintCard{box-shadow:inset 0 0 35px rgba(99,216,255,.018)}
+.link{transition:.18s}
+.link:hover{box-shadow:0 0 18px rgba(99,216,255,.06)}
+@keyframes scan{0%{top:0}100%{top:100%}}
+@keyframes orbitPulse{0%,100%{transform:scale(.96);opacity:.55}50%{transform:scale(1.04);opacity:1}}
+@media(max-width:650px){.nav:after{display:none}.herohead:before,.herohead:after{opacity:.35;right:-50px}.herohead{min-height:360px}}
+@media(prefers-reduced-motion:reduce){.herohead:before,.canvas:after{animation:none}}
 </style>
 </head>
 <body>
