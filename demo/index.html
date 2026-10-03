@@ -122,7 +122,7 @@ body:after{content:"";position:fixed;inset:0;z-index:9999;pointer-events:none;ba
   color-scheme: dark light;
   --focus:#087ea4;
 }
-.themeToggle{
+.headerControls{display:flex;align-items:center;gap:6px}.languageToggle{min-width:43px;justify-content:center}.themeToggle{
   display:inline-flex;align-items:center;gap:7px;border:1px solid #334454;
   background:#0d151d;color:#dbe8ef;border-radius:999px;padding:8px 11px;
   cursor:pointer;font-size:9px;font-weight:950;letter-spacing:.06em;
@@ -219,13 +219,15 @@ body:after{content:"";position:fixed;inset:0;z-index:9999;pointer-events:none;ba
 :root[data-theme="light"] .modal{background:rgba(232,238,242,.76)}
 :root[data-theme="light"] .modalCard{background:#fff;border-color:#c8d8d1;color:#101820}
 @media(max-width:650px){.themeToggle{padding:7px 9px}.themeToggle span:last-child{display:none}}
+
+@media(max-width:650px){.headerControls{gap:5px}.languageToggle{min-width:39px}}
 </style>
 </head>
 <body>
 <div class="shell">
 <header class="nav">
   <div class="brand"><div class="logo"><img src="../assets/xbot-logo.svg" alt="XBOT" width="28" height="28"></div><span>XBOT INTELLIGENCE PROCESSOR</span></div>
-  <div style="display:flex;align-items:center;gap:8px"><button id="themeToggle" class="themeToggle" type="button" aria-label="Switch theme"><span class="themeIcon">◐</span><span>AUTO</span></button><div class="status"><span class="led"></span>X LAYER · TEST</div></div>
+  <div style="display:flex;align-items:center;gap:8px"><div class="headerControls"><button id="languageToggle" class="themeToggle languageToggle" type="button" aria-label="Change language"><span>EN</span></button><button id="themeToggle" class="themeToggle" type="button" aria-label="Switch theme"><span class="themeIcon">◐</span><span>AUTO</span></button></div><div class="status"><span class="led"></span>X LAYER · TEST</div></div>
 </header>
 
 <main id="main" class="hero" aria-label="XBOT Intelligence Processor product demo">
