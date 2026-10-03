@@ -10,7 +10,7 @@
 <style>
 :root{--bg:#06080c;--panel:#0b0f15;--panel2:#0e141c;--line:#1b2531;--line2:#263342;--text:#f2f6fa;--muted:#8290a0;--green:#52f2a3;--cyan:#63d8ff;--red:#ff6b7c;--shadow:0 30px 100px rgba(0,0,0,.45);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-height:100vh;background:radial-gradient(900px 500px at 80% -10%,rgba(82,242,163,.09),transparent 65%),radial-gradient(700px 500px at 5% 10%,rgba(99,216,255,.06),transparent 65%),var(--bg);color:var(--text)}
-a{text-decoration:none;color:inherit}button{font:inherit}.shell{width:min(1240px,calc(100% - 36px));margin:auto;padding:22px 0 70px}
+a{text-decoration:none;color:inherit}button{font:inherit}.skip{position:absolute;left:-9999px;top:8px;z-index:1000;padding:10px 14px;border-radius:8px;background:#effff7;color:#06110b;font-weight:900}.skip:focus{left:12px}button:focus-visible,a:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}.sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}.shell{width:min(1240px,calc(100% - 36px));margin:auto;padding:22px 0 70px}
 .nav{height:58px;display:flex;align-items:center;justify-content:space-between;gap:16px}.brand{display:flex;align-items:center;gap:11px;font-weight:900;letter-spacing:.06em;font-size:13px}.logo{width:34px;height:34px;border:1px solid #2a3a49;border-radius:10px;display:grid;place-items:center;background:linear-gradient(145deg,#101923,#090d12);overflow:hidden;box-shadow:0 0 25px rgba(82,242,163,.08)}.logo img{display:block;width:28px;height:28px}.status{display:flex;align-items:center;gap:8px;padding:7px 10px;border:1px solid #20352e;border-radius:999px;background:#09120f;color:#b8fbd7;font-size:11px;font-weight:800}.led{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 12px var(--green)}
 .hero{position:relative;margin-top:18px;border:1px solid var(--line);border-radius:26px;background:linear-gradient(150deg,rgba(14,20,28,.98),rgba(7,10,14,.98));box-shadow:var(--shadow);overflow:hidden}.hero:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,transparent 20%,rgba(255,255,255,.018) 50%,transparent 80%)}
 .herohead{position:relative;padding:52px 46px 38px;border-bottom:1px solid var(--line);z-index:1}.eyebrow{display:flex;align-items:center;gap:9px;color:var(--cyan);font-size:10px;letter-spacing:.18em;font-weight:900}.eyebrow:before{content:"";width:24px;height:1px;background:var(--cyan);opacity:.7}.hero h1{max-width:850px;margin:14px 0 16px;font-size:clamp(42px,7vw,78px);line-height:.94;letter-spacing:-.06em}.hero h1 span{color:#91a1b2}.hero .lead{max-width:760px;margin:0;color:#8f9baa;font-size:15px;line-height:1.75}.heroMeta{display:flex;flex-wrap:wrap;gap:8px;margin-top:27px}.tag{padding:8px 10px;border:1px solid #222e3b;background:#0a1016;border-radius:9px;color:#9aa9b8;font-size:11px}.tag strong{color:#edf4f9;font-weight:800}
@@ -25,7 +25,7 @@ a{text-decoration:none;color:inherit}button{font:inherit}.shell{width:min(1240px
 .disclaimer{padding:14px 19px;color:#566677;font-size:9px;line-height:1.6;border-top:1px solid var(--line)}
 .pulse{animation:pulse .55s ease}@keyframes pulse{0%{transform:scale(.9);opacity:.4}65%{transform:scale(1.06);opacity:1}100%{transform:scale(1);opacity:1}}
 @media(max-width:900px){.stats{grid-template-columns:repeat(2,1fr)}.stat:nth-child(2){border-right:0}.stat:nth-child(-n+2){border-bottom:1px solid var(--line)}.execution,.proof{grid-template-columns:1fr}.addresses{border-left:0;border-top:1px solid var(--line)}.lifecycle{grid-template-columns:repeat(2,1fr)}.life:nth-child(2):after{display:none}}
-@media(max-width:650px){.shell{width:min(100% - 18px,1240px);padding-top:8px}.herohead{padding:34px 22px 28px}.body{padding:12px}.inputs{grid-template-columns:1fr;padding:12px}.stats{grid-template-columns:1fr 1fr}.stat{padding:15px}.execution{padding:12px}.canvas{height:315px}.node{width:78px;font-size:8px}.node small{font-size:6px}.n1,.n2{left:3%}.n3{left:29%}.n4,.n5{left:53%}.n6{left:77%}.lifecycle{grid-template-columns:1fr;padding:12px}.life:after{display:none!important}.hero h1{font-size:48px}.sectionHead{padding:14px 15px}.toolbar{padding:0 12px 12px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation:none!important;transition:none!important}}\n@media(max-width:650px){.shell{width:min(100% - 18px,1240px);padding-top:8px}.herohead{padding:34px 22px 28px}.body{padding:12px}.inputs{grid-template-columns:1fr;padding:12px}.stats{grid-template-columns:1fr 1fr}.stat{padding:15px}.execution{padding:12px}.canvas{height:315px}.node{width:78px;font-size:8px}.node small{font-size:6px}.n1,.n2{left:3%}.n3{left:29%}.n4,.n5{left:53%}.n6{left:77%}.lifecycle{grid-template-columns:1fr;padding:12px}.life:after{display:none!important}.hero h1{font-size:48px}.sectionHead{padding:14px 15px}.toolbar{padding:0 12px 12px}}
 </style>
 </head>
 <body>
@@ -35,7 +35,7 @@ a{text-decoration:none;color:inherit}button{font:inherit}.shell{width:min(1240px
   <div class="status"><span class="led"></span>X LAYER · TEST</div>
 </header>
 
-<main class="hero">
+<main id="main" class="hero" aria-label="XBOT Intelligence Processor product demo">
 <section class="herohead">
   <div class="eyebrow">TAPEOUT CIRCUIT / ON-CHAIN LOGIC</div>
   <h1>Intelligence, <span>made deterministic.</span></h1>
@@ -56,9 +56,9 @@ a{text-decoration:none;color:inherit}button{font:inherit}.shell{width:min(1240px
 <section class="section">
  <div class="sectionHead"><div class="sectionTitle"><span class="num">01</span> Intelligence inputs</div><div class="hint">Binary signal control</div></div>
  <div class="inputs">
-  <div class="signal" data-card="0"><div class="sigTop"><span class="sigCode">IN0 / SIGNAL</span><span class="pill" data-state="0">LOW</span></div><div class="sigName">Risk</div><div class="switch"><button data-input="0" data-value="0">0 · LOW</button><button data-input="0" data-value="1">1 · HIGH</button></div></div>
-  <div class="signal" data-card="1"><div class="sigTop"><span class="sigCode">IN1 / SIGNAL</span><span class="pill" data-state="1">LOW</span></div><div class="sigName">Liquidity</div><div class="switch"><button data-input="1" data-value="0">0 · LOW</button><button data-input="1" data-value="1">1 · HIGH</button></div></div>
-  <div class="signal" data-card="2"><div class="sigTop"><span class="sigCode">IN2 / SIGNAL</span><span class="pill" data-state="2">LOW</span></div><div class="sigName">Market</div><div class="switch"><button data-input="2" data-value="0">0 · LOW</button><button data-input="2" data-value="1">1 · HIGH</button></div></div>
+  <div class="signal" data-card="0" role="group" aria-label="Risk input"><div class="sigTop"><span class="sigCode">IN0 / SIGNAL</span><span class="pill" data-state="0">LOW</span></div><div class="sigName">Risk</div><div class="switch"><button aria-pressed="true" data-input="0" data-value="0">0 · LOW</button><button aria-pressed="false" data-input="0" data-value="1">1 · HIGH</button></div></div>
+  <div class="signal" data-card="1" role="group" aria-label="Liquidity input"><div class="sigTop"><span class="sigCode">IN1 / SIGNAL</span><span class="pill" data-state="1">LOW</span></div><div class="sigName">Liquidity</div><div class="switch"><button aria-pressed="true" data-input="1" data-value="0">0 · LOW</button><button aria-pressed="false" data-input="1" data-value="1">1 · HIGH</button></div></div>
+  <div class="signal" data-card="2" role="group" aria-label="Market input"><div class="sigTop"><span class="sigCode">IN2 / SIGNAL</span><span class="pill" data-state="2">LOW</span></div><div class="sigName">Market</div><div class="switch"><button aria-pressed="true" data-input="2" data-value="0">0 · LOW</button><button aria-pressed="false" data-input="2" data-value="1">1 · HIGH</button></div></div>
  </div>
 </section>
 
@@ -76,11 +76,11 @@ a{text-decoration:none;color:inherit}button{font:inherit}.shell{width:min(1240px
    <i class="wire w1" data-wire="w1"></i><i class="wire w2" data-wire="w2"></i><i class="wire w3" data-wire="w3"></i><i class="wire w4" data-wire="w4"></i><i class="wire w5" data-wire="w5"></i><i class="wire w6" data-wire="w6"></i>
   </div>
   <aside class="outputPanel">
-   <div class="outCode">OUT0 / XBOT CONSENSUS</div><div id="output" class="out off">0</div><div id="status" class="decision">Consensus is <strong>not asserted</strong>.</div>
+   <div class="outCode">OUT0 / XBOT CONSENSUS</div><div id="output" class="out off" role="status" aria-live="polite" aria-label="XBOT consensus output">0</div><div id="status" class="decision" aria-live="polite">Consensus is <strong>not asserted</strong>.</div>
    <div class="metrics"><div class="metric"><span>ACTIVE SIGNALS</span><b id="activeCount">0 / 3</b></div><div class="metric"><span>DECISION RULE</span><b>≥ 2 HIGH</b></div><div class="metric"><span>LOGIC</span><b>NAND</b></div></div>
   </aside>
  </div>
- <div class="toolbar"><button id="runAll" class="control primary">▶ RUN 8-CASE VERIFICATION</button><button id="reset" class="control">RESET</button></div>
+ <div class="toolbar"><button id="runAll" class="control primary" aria-label="Run all eight truth table verification cases">▶ RUN 8-CASE VERIFICATION</button><button id="reset" class="control" aria-label="Reset all inputs to low">RESET</button></div>
 </section>
 
 <section class="section">
