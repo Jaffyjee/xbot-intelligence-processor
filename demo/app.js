@@ -40,7 +40,7 @@ function render() {
 
   const outputEl = document.getElementById("output");
   outputEl.textContent = output;
-  outputEl.className = "outvalue " + (output ? "on" : "off");
+  outputEl.className = "out " + (output ? "on" : "off");
   outputEl.classList.remove("pulse");
   void outputEl.offsetWidth;
   outputEl.classList.add("pulse");
@@ -56,7 +56,7 @@ function render() {
   document.querySelectorAll("[data-input]").forEach(button => {
     const input = Number(button.dataset.input);
     const value = Number(button.dataset.value);
-    button.classList.toggle("active", state[input] === value);
+    const active = state[input] === value;\n    button.classList.toggle("active", active);\n    button.setAttribute("aria-pressed", String(active));
   });
 
   document.querySelectorAll("[data-card]").forEach(card => {
@@ -104,7 +104,7 @@ function renderTable() {
 
     const stateCell = document.createElement("td");
     stateCell.textContent = current ? "CURRENT" : (result ? "ASSERT" : "REJECT");
-    stateCell.className = result ? "result1" : "result0";
+    stateCell.className = result ? "one" : "zero";
     tr.appendChild(stateCell);
 
     body.appendChild(tr);
