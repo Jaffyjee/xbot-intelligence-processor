@@ -423,7 +423,18 @@ body{width:100%;overflow-x:hidden}
   .section:hover,.signal:hover,.life:hover,.chainMetric:hover,.mintCard:hover,.socialCard:hover{transform:none;box-shadow:none}
   .control:hover,.link:hover{transform:none}
 }
-.socialBrand svg{width:17px;height:17px;display:block}.socialBrand{color:#e7f3ed}.socialCard:hover .socialBrand{color:var(--cyan)}.socialBrand svg path,.socialBrand svg circle,.socialBrand svg rect{vector-effect:non-scaling-stroke}</style>
+.socialBrand svg{width:17px;height:17px;display:block}.socialBrand{color:#e7f3ed}.socialCard:hover .socialBrand{color:var(--cyan)}.socialBrand svg path,.socialBrand svg circle,.socialBrand svg rect{vector-effect:non-scaling-stroke}@media (max-width:650px){
+  #connect .socialCard{display:flex;justify-content:center;align-items:center;width:52px;height:52px;min-width:52px;padding:0;border-radius:14px}
+  #connect .socialCard .socialIcon{width:30px;height:30px;flex:0 0 30px;border:0;background:transparent}
+  #connect .socialCard .socialIcon svg{width:22px;height:22px}
+  #connect .socialCard span:nth-child(2),#connect .socialCard .socialArrow{display:none}
+  #connect > div[style]{padding:12px 10px!important}
+  #connect > div[style] > div{display:flex!important;justify-content:center;align-items:center;gap:10px!important;flex-wrap:wrap}
+}
+@media (max-width:390px){
+  #connect .socialCard{width:48px;height:48px;min-width:48px}
+  #connect .socialCard .socialIcon svg{width:21px;height:21px}
+}</style>
 </head>
 <body>
 <div class="shell">
