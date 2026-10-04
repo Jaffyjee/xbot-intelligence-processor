@@ -562,22 +562,24 @@ function parseMintLog(log) {
   const to = topicAddress(log.topics[3]);
   const data = log.data || "0x";
   const isBatch = data.length > 130;
+  const base = {
+    contractAddress: log.address || TRANSISTOR_CONTRACT,
+    txHash: log.transactionHash,
+    blockNumber: Number(hexToBigInt(log.blockNumber)),
+    logIndex: Number(hexToBigInt(log.logIndex)),
+    to
+  };
+
   if (!isBatch) {
     return [{
-      txHash: log.transactionHash,
-      blockNumber: Number(hexToBigInt(log.blockNumber)),
-      logIndex: Number(hexToBigInt(log.logIndex)),
-      to,
+      ...base,
       tokenId: decodeUintWord(data, 0).toString(),
       amount: decodeUintWord(data, 1)
     }];
   }
 
   return decodeBatch(data).map(item => ({
-    txHash: log.transactionHash,
-    blockNumber: Number(hexToBigInt(log.blockNumber)),
-    logIndex: Number(hexToBigInt(log.logIndex)),
-    to,
+    ...base,
     tokenId: item.tokenId,
     amount: item.amount
   }));
