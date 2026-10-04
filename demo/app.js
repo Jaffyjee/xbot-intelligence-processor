@@ -562,6 +562,8 @@ function decodeBatch(data) {
 
 function parseMintLog(log) {
   if (!log?.topics || log.topics.length < 4) return [];
+  const topic0 = String(log.topics[0] || "").toLowerCase();
+  if (topic0 !== TRANSFER_SINGLE_TOPIC && topic0 !== TRANSFER_BATCH_TOPIC) return [];
   const from = topicAddress(log.topics[2]);
   if (from !== ZERO_ADDRESS) return [];
 
@@ -672,12 +674,26 @@ function setLiveStatus(kind, text) {
 }
 
 async function getMintLogs(from, to) {
-  return rpc("eth_getLogs", [{
-    address: TRANSISTOR_CONTRACT,
-    fromBlock: "0x" + Math.max(0, from).toString(16),
-    toBlock: "0x" + Math.max(0, to).toString(16),
-    topics: [[TRANSFER_SINGLE_TOPIC, TRANSFER_BATCH_TOPIC], null, ZERO_TOPIC]
-  }]);
+  const start = Math.max(0, from);
+  const end = Math.max(0, to);
+  try {
+    return await rpc("eth_getLogs", [{
+      address: TRANSISTOR_CONTRACT,
+      fromBlock: "0x" + start.toString(16),
+      toBlock: "0x" + end.toString(16),
+      topics: [[TRANSFER_SINGLE_TOPIC, TRANSFER_BATCH_TOPIC], null, ZERO_TOPIC]
+    }]);
+  } catch (error) {
+    // Public RPC providers can impose a maximum block span. Split the same
+    // exact query rather than dropping history or silently reporting partial data.
+    if (end - start < 10000) throw error;
+    const middle = Math.floor((start + end) / 2);
+    const [left, right] = await Promise.all([
+      getMintLogs(start, middle),
+      getMintLogs(middle + 1, end)
+    ]);
+    return [...left, ...right];
+  }
 }
 
 async function loadRecentMints() {
