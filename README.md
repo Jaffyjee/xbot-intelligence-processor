@@ -271,6 +271,7 @@ XBOT Intelligence Processor is an experimental software and digital-logic projec
 
 ## Links
 
+- [XBOT Processor — xbotprocessor.com](https://www.xbotprocessor.com/)
 - [XBOT Intelligence Processor on GitHub](https://github.com/Jaffyjee/xbot-intelligence-processor)
 - [TapeOut](https://www.tapeout.net/)
 - [X Layer](https://www.okx.com/xlayer)
