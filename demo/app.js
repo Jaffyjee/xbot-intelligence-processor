@@ -452,7 +452,7 @@ function setRunning(value) {
    Live X Layer mint tracker
    ----------------------------- */
 
-const X_LAYER_HTTP = "https://rpc.xlayer.tech";
+const X_LAYER_HTTP = "/api/xlayer/rpc";
 const X_LAYER_WSS = "wss://ws.xlayer.tech";
 const PROCESSOR_CONTRACT = "0xa5fc69Ca2D3d462CCa204D894D85ac8071c4F0f0";
 const TRANSISTOR_CONTRACT = "0x7bE7280e31984d18f62218519985EC5DcCa751De";
@@ -707,6 +707,28 @@ async function loadRecentMints() {
     setText("liveBlock", latest.toLocaleString());
 
     const from = Math.max(0, latest - LIVE_HISTORY_BLOCKS);
+
+    // Server-side OKX verification is an indexed second source. Credentials
+    // never reach the browser; the endpoint verifies successful transactions
+    // against the premium X Layer RPC before returning events.
+    try {
+      const response = await fetch("/api/xlayer/mints?limit=80", { cache: "no-store" });
+      if (response.ok) {
+        const verified = await response.json();
+        if (verified?.ok && Array.isArray(verified.events) && verified.events.length) {
+          mergeEvents(verified.events.map(event => ({
+            ...event,
+            amount: BigInt(event.amount),
+            live: false
+          })));
+          renderLiveFeed();
+          setLiveStatus("on", "OKX VERIFIED · PREMIUM RPC");
+        }
+      }
+    } catch (error) {
+      console.warn("XBOT OKX mint verification:", error);
+    }
+
     const logs = await getMintLogs(from, latest);
     const parsed = [];
     for (const log of logs || []) parsed.push(...parseMintLog(log));
