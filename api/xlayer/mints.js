@@ -128,15 +128,37 @@ async function rpcVerifyTransactions(events) {
   }));
 
   const receipts = new Map(receiptResults);
+
+  function decodeReceiptLog(log) {
+    if (String(log.address || "").toLowerCase() !== TRANSISTOR_CONTRACT.toLowerCase()) return [];
+    const topics = Array.isArray(log.topics) ? log.topics : [];
+    if (topics.length < 4) return [];
+    const topic0 = String(topics[0] || "").toLowerCase();
+    if (topicAddress(topics[2]) !== ZERO_ADDRESS) return [];
+
+    const data = log.data || "0x";
+    if (topic0 === TRANSFER_SINGLE_TOPIC) {
+      return [{
+        tokenId: uint(data, 0).toString(),
+        amount: uint(data, 1).toString()
+      }];
+    }
+    if (topic0 === TRANSFER_BATCH_TOPIC) return batch(data);
+    return [];
+  }
+
   const verifiedEvents = events.filter(event => {
     const receipt = receipts.get(String(event.txHash).toLowerCase());
     if (!receipt) return false;
-    return receipt.logs?.some(log =>
-      String(log.address || "").toLowerCase() === TRANSISTOR_CONTRACT.toLowerCase() &&
-      Number(BigInt(log.logIndex || "0x0")) === event.logIndex &&
-      String(log.topics?.[0] || "").toLowerCase() ===
-        (event.tokenId != null ? String(log.topics?.[0] || "").toLowerCase() : "")
-    );
+
+    return receipt.logs?.some(log => {
+      if (Number(BigInt(log.logIndex || "0x0")) !== event.logIndex) return false;
+      const decoded = decodeReceiptLog(log);
+      return decoded.some(item =>
+        item.tokenId === String(event.tokenId) &&
+        item.amount === String(event.amount)
+      );
+    });
   }).map(event => ({ ...event, verified: true, source: "okx+rpcs" }));
 
   return { events: verifiedEvents, verified: true };
