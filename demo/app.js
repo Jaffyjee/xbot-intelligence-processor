@@ -107,7 +107,7 @@ async function ensureXLayer() {
           chainId: XBOT_CHAIN_ID,
           chainName: "X Layer",
           nativeCurrency: { name: "OKB", symbol: "OKB", decimals: 18 },
-          rpcUrls: [X_LAYER_HTTP],
+          rpcUrls: [X_LAYER_WALLET_RPC],
           blockExplorerUrls: ["https://www.oklink.com/x-layer"]
         }]
       });
@@ -453,6 +453,7 @@ function setRunning(value) {
    ----------------------------- */
 
 const X_LAYER_HTTP = "/api/xlayer/rpc";
+const X_LAYER_WALLET_RPC = "https://rpc.xlayer.tech";
 const X_LAYER_WSS = "wss://ws.xlayer.tech";
 const PROCESSOR_CONTRACT = "0xa5fc69Ca2D3d462CCa204D894D85ac8071c4F0f0";
 const TRANSISTOR_CONTRACT = "0x7bE7280e31984d18f62218519985EC5DcCa751De";
