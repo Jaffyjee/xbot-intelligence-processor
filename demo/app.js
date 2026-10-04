@@ -462,12 +462,18 @@ const LIVE_BACKFILL_CHUNK = 250000;
 const MAX_FEED_ITEMS = 80;
 const RPC_TIMEOUT_MS = 9000;
 const HISTORY_KEY = "xbot-mint-history-cursor:" + TRANSISTOR_CONTRACT.toLowerCase();
+const TRANSFER_SINGLE_TOPIC = "0xc3d58168c5ae7397731d063d5bbf3d657854427343f4c083240f7aacaa2d0f62";
+const TRANSFER_BATCH_TOPIC = "0x4a39dc06d4c0dbc64b70af90fd698a233a518aa5d07e595d983b8c0526c8f7fb";
+const ZERO_TOPIC = "0x" + "0".repeat(64);
 let liveEvents = [];
 let liveSocket = null;
 let pollTimer = null;
 let liveBusy = false;
 let lastLiveBlock = null;
 let historyBackfillRunning = false;
+let indexedMintKeys = new Set();
+let indexedMintTransactions = new Set();
+let indexedMintUnits = 0n;
 const blockTimeCache = new Map();
 
 function hexToBigInt(hex) {
@@ -589,6 +595,11 @@ function mergeEvents(items) {
   const map = new Map();
   [...liveEvents, ...items].forEach(item => {
     const key = item.contractAddress.toLowerCase() + ":" + item.txHash + ":" + item.logIndex + ":" + item.tokenId;
+    if (!indexedMintKeys.has(key)) {
+      indexedMintKeys.add(key);
+      indexedMintTransactions.add(item.txHash);
+      indexedMintUnits += item.amount;
+    }
     map.set(key, item);
   });
   liveEvents = [...map.values()]
@@ -649,10 +660,8 @@ function renderLiveFeed() {
     '</article>';
   }).join("");
 
-  const count = new Set(liveEvents.map(item => item.txHash)).size;
-  const units = liveEvents.reduce((sum, item) => sum + item.amount, 0n);
-  setText("mintCount", count.toLocaleString());
-  setText("mintUnits", formatUnits(units));
+  setText("mintCount", indexedMintTransactions.size.toLocaleString());
+  setText("mintUnits", formatUnits(indexedMintUnits));
 }
 
 function setLiveStatus(kind, text) {
@@ -666,7 +675,8 @@ async function getMintLogs(from, to) {
   return rpc("eth_getLogs", [{
     address: TRANSISTOR_CONTRACT,
     fromBlock: "0x" + Math.max(0, from).toString(16),
-    toBlock: "0x" + Math.max(0, to).toString(16)
+    toBlock: "0x" + Math.max(0, to).toString(16),
+    topics: [[TRANSFER_SINGLE_TOPIC, TRANSFER_BATCH_TOPIC], null, ZERO_TOPIC]
   }]);
 }
 
