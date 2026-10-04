@@ -75,7 +75,9 @@ function address32(address) {
   return address.toLowerCase().replace(/^0x/, "").padStart(64, "0");
 }
 function bytesEmpty() {
-  return "0000000000000000000000000000000000000000000000000000000000000040" +
+  // ABI offset for the fourth (dynamic bytes) argument after
+  // three 32-byte static arguments is 0x80.
+  return "0000000000000000000000000000000000000000000000000000000000000080" +
     "0000000000000000000000000000000000000000000000000000000000000000";
 }
 function weiToOkb(wei) {
@@ -183,7 +185,7 @@ async function estimateMintData(quantity, valueHex) {
     {
       label: "mint(tokenId, quantity, bytes)",
       data: MINT_TWO_UINT_BYTES_SELECTOR + hex32(0) + hex32(quantity) +
-        "0000000000000000000000000000000000000000000000000000000000000040" +
+        "0000000000000000000000000000000000000000000000000000000000000060" +
         "0000000000000000000000000000000000000000000000000000000000000000"
     },
     {
