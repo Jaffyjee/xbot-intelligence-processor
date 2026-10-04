@@ -562,7 +562,7 @@ body{width:100%;overflow-x:hidden}
 </section>
 
 <section class="section" id="live-flow" aria-labelledby="live-flow-title">
- <div class="sectionHead"><div class="sectionTitle" id="live-flow-title"><span class="num">05</span> Live X Layer flow</div><div class="hint">ERC-1155 mint activity · no API key</div></div>
+ <div class="sectionHead"><div class="sectionTitle" id="live-flow-title"><span class="num">05</span> Live X Layer flow</div><div class="hint">ERC-1155 mint activity · OKX + premium RPC verification</div></div>
  <div class="liveGrid">
   <div class="liveFeed">
    <div class="liveToolbar">
@@ -570,7 +570,7 @@ body{width:100%;overflow-x:hidden}
     <button id="refreshLive" class="control" type="button">↻ REFRESH</button>
    </div>
    <div id="mintFeed" class="liveFeedList" aria-live="polite" aria-label="Live XBOT transistor mint feed">
-    <div class="emptyFlow">Connecting to the X Layer public RPC and loading transistor mint history…</div>
+    <div class="emptyFlow">Connecting to X Layer and loading verified transistor mint history…</div>
    </div>
   </div>
   <aside class="liveSide">
@@ -585,7 +585,7 @@ body{width:100%;overflow-x:hidden}
     <a class="link" href="https://www.tapeout.net/" target="_blank" rel="noopener">MINT ON TAPEOUT ↗</a>
     <a class="link" href="https://www.oklink.com/x-layer/evm/address/0x7bE7280e31984d18f62218519985EC5DcCa751De" target="_blank" rel="noopener">OPEN EXPLORER ↗</a>
    </div>
-   <div class="liveNote"><strong>How it works:</strong> the page watches the X Layer ERC-1155 transistor contract for mint events (transfers from the zero address), loads recent on-chain history, and then keeps a WebSocket subscription alive for new events. If WebSocket is unavailable, it falls back to HTTP polling.</div>
+   <div class="liveNote"><strong>How it works:</strong> the page watches the actual XBOT ERC-1155 transistor contract for confirmed mint events, uses the premium X Layer RPC through a server-side proxy for on-chain reads, and cross-checks recent indexed events through the authenticated OKX X Layer Data API. WebSocket and HTTP polling remain live fallbacks.</div>
   </aside>
  </div>
 </section>
