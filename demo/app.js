@@ -59,13 +59,24 @@ const XBOT_CHAIN_HEX = "0xc4";
 const XBOT_CONTRACT = TRANSISTOR_CONTRACT;
 const XBOT_UNIT_PRICE_WEI = 9000000000000000n; // 0.009 OKB
 const XBOT_FALLBACK_PROTOCOL_FEE_WEI = 660000000000000n; // observed XBOT UI quote: 0.00066 OKB
-const MINT_UINT_SELECTOR = "0xa0712d68"; // mint(uint256)
+const MINT_UINT_SELECTOR = "0xa0712d68"; // mint(uint256) legacy
+const MINT_TWO_UINT_SELECTOR = "0x1b2ef1ca"; // mint(uint256,uint256)
+const MINT_ADDRESS_TWO_UINT_SELECTOR = "0x156e29f6"; // mint(address,uint256,uint256)
+const MINT_ADDRESS_TWO_UINT_BYTES_SELECTOR = "0x731133e9"; // mint(address,uint256,uint256,bytes)
+const MINT_TWO_UINT_BYTES_SELECTOR = "0x08dc9f42"; // mint(uint256,uint256,bytes)
 let walletAccount = null;
 let walletProvider = null;
 let mintProtocolFeeWei = XBOT_FALLBACK_PROTOCOL_FEE_WEI;
 
 function hex32(n) {
   return BigInt(n).toString(16).padStart(64, "0");
+}
+function address32(address) {
+  return address.toLowerCase().replace(/^0x/, "").padStart(64, "0");
+}
+function bytesEmpty() {
+  return "0000000000000000000000000000000000000000000000000000000000000040" +
+    "0000000000000000000000000000000000000000000000000000000000000000";
 }
 function weiToOkb(wei) {
   const n = typeof wei === "bigint" ? wei : BigInt(wei || 0);
@@ -155,16 +166,62 @@ async function connectWallet() {
 }
 
 async function estimateMintData(quantity, valueHex) {
-  const candidate = { label: "mint(quantity)", data: MINT_UINT_SELECTOR + hex32(quantity) };
-  try {
-    await walletProvider.request({
-      method: "eth_estimateGas",
-      params: [{ from: walletAccount, to: XBOT_CONTRACT, value: valueHex, data: candidate.data }]
-    });
-    return candidate;
-  } catch {
-    throw new Error("The deployed XBOT transistor contract did not accept the expected mint(quantity) call. No transaction was sent.");
+  // TapeOut processors use ERC-1155 transistor contracts, so the public
+  // purchase entry point must identify which transistor type is being
+  // purchased. XBOT uses token ID 0 (NAND) for the processor demo.
+  // We probe read-only gas estimates first and only send the route that
+  // the deployed contract actually accepts.
+  const candidates = [
+    {
+      label: "mint(tokenId, quantity)",
+      data: MINT_TWO_UINT_SELECTOR + hex32(0) + hex32(quantity)
+    },
+    {
+      label: "mint(quantity, tokenId)",
+      data: MINT_TWO_UINT_SELECTOR + hex32(quantity) + hex32(0)
+    },
+    {
+      label: "mint(tokenId, quantity, bytes)",
+      data: MINT_TWO_UINT_BYTES_SELECTOR + hex32(0) + hex32(quantity) +
+        "0000000000000000000000000000000000000000000000000000000000000040" +
+        "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      label: "mint(recipient, tokenId, quantity)",
+      data: MINT_ADDRESS_TWO_UINT_SELECTOR + address32(walletAccount) + hex32(0) + hex32(quantity)
+    },
+    {
+      label: "mint(recipient, tokenId, quantity, bytes)",
+      data: MINT_ADDRESS_TWO_UINT_BYTES_SELECTOR + address32(walletAccount) + hex32(0) + hex32(quantity) + bytesEmpty()
+    },
+    {
+      label: "mint(quantity)",
+      data: MINT_UINT_SELECTOR + hex32(quantity)
+    }
+  ];
+
+  const failures = [];
+  for (const candidate of candidates) {
+    try {
+      await walletProvider.request({
+        method: "eth_estimateGas",
+        params: [{
+          from: walletAccount,
+          to: XBOT_CONTRACT,
+          value: valueHex,
+          data: candidate.data
+        }]
+      });
+      return candidate;
+    } catch (error) {
+      failures.push(candidate.label);
+    }
   }
+
+  throw new Error(
+    "The XBOT TapeOut transistor contract rejected every supported mint route. " +
+    "No transaction was sent. Tried: " + failures.join(", ") + "."
+  );
 }
 
 /**
