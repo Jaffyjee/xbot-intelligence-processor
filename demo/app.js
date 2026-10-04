@@ -353,7 +353,16 @@ function showMintSuccess(quantity, txHash) {
   tx.textContent = "View confirmed transaction ↗";
   modal.classList.add("open");
 }
-function closeMintSuccess() { document.getElementById("mintSuccessModal")?.classList.remove("open"); }
+function closeMintSuccess() {
+  document.getElementById("mintSuccessModal")?.classList.remove("open");
+  const mintSection = document.getElementById("mint");
+  if (mintSection) {
+    mintSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    window.setTimeout(() => {
+      document.getElementById("mintQuantity")?.focus({ preventScroll: true });
+    }, 450);
+  }
+}
 
 document.getElementById("connectWallet")?.addEventListener("click", connectWallet);
 document.getElementById("mintButton")?.addEventListener("click", mintXBOT);
