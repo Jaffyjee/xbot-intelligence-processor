@@ -454,16 +454,21 @@ function setRunning(value) {
 
 const X_LAYER_HTTP = "https://rpc.xlayer.tech";
 const X_LAYER_WSS = "wss://ws.xlayer.tech";
+const PROCESSOR_CONTRACT = "0xa5fc69Ca2D3d462CCa204D894D85ac8071c4F0f0";
 const TRANSISTOR_CONTRACT = "0x7bE7280e31984d18f62218519985EC5DcCa751De";
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 const LIVE_HISTORY_BLOCKS = 250000;
+const LIVE_BACKFILL_CHUNK = 250000;
 const MAX_FEED_ITEMS = 80;
 const RPC_TIMEOUT_MS = 9000;
+const HISTORY_KEY = "xbot-mint-history-cursor:" + TRANSISTOR_CONTRACT.toLowerCase();
 let liveEvents = [];
 let liveSocket = null;
 let pollTimer = null;
 let liveBusy = false;
 let lastLiveBlock = null;
+let historyBackfillRunning = false;
+const blockTimeCache = new Map();
 
 function hexToBigInt(hex) {
   try {
@@ -581,7 +586,7 @@ function parseMintLog(log) {
 function mergeEvents(items) {
   const map = new Map();
   [...liveEvents, ...items].forEach(item => {
-    const key = item.txHash + ":" + item.logIndex + ":" + item.tokenId;
+    const key = item.contractAddress.toLowerCase() + ":" + item.txHash + ":" + item.logIndex + ":" + item.tokenId;
     map.set(key, item);
   });
   liveEvents = [...map.values()]
@@ -589,12 +594,44 @@ function mergeEvents(items) {
     .slice(0, MAX_FEED_ITEMS);
 }
 
+async function getBlockTimestamp(blockNumber) {
+  const number = Number(blockNumber);
+  if (blockTimeCache.has(number)) return blockTimeCache.get(number);
+  const block = await rpc("eth_getBlockByNumber", ["0x" + number.toString(16), false]);
+  const timestamp = Number(hexToBigInt(block?.timestamp)) * 1000;
+  blockTimeCache.set(number, timestamp);
+  return timestamp;
+}
+
+async function hydrateEventTimes(items) {
+  const uniqueBlocks = [...new Set(items.map(item => item.blockNumber))];
+  const timestamps = new Map();
+  for (let i = 0; i < uniqueBlocks.length; i += 10) {
+    const group = uniqueBlocks.slice(i, i + 10);
+    const results = await Promise.all(group.map(async block => {
+      try {
+        return [block, await getBlockTimestamp(block)];
+      } catch {
+        return [block, 0];
+      }
+    }));
+    results.forEach(([block, timestamp]) => timestamps.set(block, timestamp));
+  }
+  items.forEach(item => {
+    item.time = timestamps.get(item.blockNumber) || 0;
+    item.live = Boolean(item.live);
+  });
+  return items;
+}
+
 function renderLiveFeed() {
   const feed = document.getElementById("mintFeed");
   if (!feed) return;
 
   if (!liveEvents.length) {
-    feed.innerHTML = '<div class="emptyFlow">No transistor mint events were found in the loaded history yet. Keep this page open and new mints will appear automatically.</div>';
+    feed.innerHTML = '<div class="emptyFlow">No confirmed XBOT transistor mint events were found yet. The tracker reads the actual ERC-1155 mint contract directly from X Layer.</div>';
+    setText("mintCount", "0");
+    setText("mintUnits", "0");
     return;
   }
 
@@ -610,7 +647,7 @@ function renderLiveFeed() {
     '</article>';
   }).join("");
 
-  const count = liveEvents.length;
+  const count = new Set(liveEvents.map(item => item.txHash)).size;
   const units = liveEvents.reduce((sum, item) => sum + item.amount, 0n);
   setText("mintCount", count.toLocaleString());
   setText("mintUnits", formatUnits(units));
@@ -621,6 +658,14 @@ function setLiveStatus(kind, text) {
   const label = document.getElementById("liveConnection");
   if (dot) dot.className = "liveDot " + (kind === "on" ? "on" : kind === "warn" ? "warn" : "");
   if (label) label.textContent = text;
+}
+
+async function getMintLogs(from, to) {
+  return rpc("eth_getLogs", [{
+    address: TRANSISTOR_CONTRACT,
+    fromBlock: "0x" + Math.max(0, from).toString(16),
+    toBlock: "0x" + Math.max(0, to).toString(16)
+  }]);
 }
 
 async function loadRecentMints() {
@@ -634,25 +679,71 @@ async function loadRecentMints() {
     setText("liveBlock", latest.toLocaleString());
 
     const from = Math.max(0, latest - LIVE_HISTORY_BLOCKS);
-    const logs = await rpc("eth_getLogs", [{
-      address: TRANSISTOR_CONTRACT,
-      fromBlock: "0x" + from.toString(16),
-      toBlock: "0x" + latest.toString(16)
-    }]);
-
+    const logs = await getMintLogs(from, latest);
     const parsed = [];
-    for (const log of logs || []) {
-      parsed.push(...parseMintLog(log));
-    }
-    parsed.forEach(item => { item.time = Date.now(); item.live = false; });
+    for (const log of logs || []) parsed.push(...parseMintLog(log));
+    await hydrateEventTimes(parsed);
     mergeEvents(parsed);
     renderLiveFeed();
+
+    // Preserve a durable cursor so the browser can progressively discover
+    // older confirmed mints without losing progress between page loads.
+    const savedCursor = Number(localStorage.getItem(HISTORY_KEY));
+    const initialCursor = Number.isFinite(savedCursor) && savedCursor >= 0
+      ? Math.min(savedCursor, from - 1)
+      : from - 1;
+    if (initialCursor >= 0) localStorage.setItem(HISTORY_KEY, String(initialCursor));
+
     setLiveStatus("on", "LIVE · X LAYER CONNECTED");
+    startHistoricalBackfill();
   } catch (error) {
     console.warn("XBOT live tracker:", error);
     setLiveStatus("warn", "RPC RETRYING");
   } finally {
     liveBusy = false;
+  }
+}
+
+async function backfillHistoricalChunk() {
+  const latest = lastLiveBlock ?? Number(hexToBigInt(await rpc("eth_blockNumber")));
+  let cursor = Number(localStorage.getItem(HISTORY_KEY));
+  if (!Number.isFinite(cursor)) cursor = Math.max(0, latest - LIVE_HISTORY_BLOCKS - 1);
+  if (cursor < 0) return false;
+
+  const to = cursor;
+  const from = Math.max(0, to - LIVE_BACKFILL_CHUNK + 1);
+  const logs = await getMintLogs(from, to);
+  const parsed = [];
+  for (const log of logs || []) parsed.push(...parseMintLog(log));
+  if (parsed.length) {
+    await hydrateEventTimes(parsed);
+    mergeEvents(parsed);
+    renderLiveFeed();
+  }
+
+  const next = from - 1;
+  localStorage.setItem(HISTORY_KEY, String(next));
+  setLiveStatus("warn", next >= 0 ? "BACKFILLING X LAYER HISTORY" : "LIVE · X LAYER CONNECTED");
+  return next >= 0;
+}
+
+async function startHistoricalBackfill() {
+  if (historyBackfillRunning) return;
+  historyBackfillRunning = true;
+  try {
+    while (true) {
+      const more = await backfillHistoricalChunk();
+      if (!more) break;
+      // Yield to the browser between RPC ranges so the mint UI remains responsive.
+      await new Promise(resolve => setTimeout(resolve, 150));
+    }
+    setLiveStatus("on", "LIVE · X LAYER CONNECTED · FULL HISTORY SYNCED");
+  } catch (error) {
+    console.warn("XBOT historical mint backfill:", error);
+    setLiveStatus("warn", "LIVE · HISTORY BACKFILL RETRYING");
+    window.setTimeout(startHistoricalBackfill, 5000);
+  } finally {
+    historyBackfillRunning = false;
   }
 }
 
@@ -666,16 +757,12 @@ async function pollLatestBlock() {
     }
     if (latest <= lastLiveBlock) return;
 
-    const logs = await rpc("eth_getLogs", [{
-      address: TRANSISTOR_CONTRACT,
-      fromBlock: "0x" + (lastLiveBlock + 1).toString(16),
-      toBlock: "0x" + latest.toString(16)
-    }]);
-
+    const logs = await getMintLogs(lastLiveBlock + 1, latest);
     const parsed = [];
     for (const log of logs || []) parsed.push(...parseMintLog(log));
-    parsed.forEach(item => { item.time = Date.now(); item.live = true; });
     if (parsed.length) {
+      await hydrateEventTimes(parsed);
+      parsed.forEach(item => { item.live = true; });
       mergeEvents(parsed);
       renderLiveFeed();
     }
